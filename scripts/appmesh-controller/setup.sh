@@ -23,7 +23,7 @@ SERVICE_ACCOUNT_NAME="appmesh-controller"
 # 1.2.2        	1.2.1
 # 1.2.1        	1.2.1
 
-APP_VERSION="1.5.0"
+# APP_VERSION="1.5.0"
 CHART_VERSION="1.5.0"
 
 echo "[debug] detecting AWS Account ID"
@@ -80,7 +80,7 @@ eksctl create iamserviceaccount \
   --override-existing-serviceaccounts
 
 echo "[debug] creating Custom Resource Definition (CRDs)"
-kubectl apply -k "https://github.com/aws/eks-charts/stable/appmesh-controller/crds?ref=master"
+kubectl apply -k "github.com/aws/eks-charts/stable/appmesh-controller//crds?ref=master"
 
 echo "[debug] detecting Helm resource existance"
 helm list --all-namespaces | grep -q 'appmesh-controller'
@@ -95,7 +95,6 @@ if [ $? -ne 0 ]; then
     eks/appmesh-controller \
       --set serviceAccount.create=false \
       --set serviceAccount.name=${SERVICE_ACCOUNT_NAME} \
-      --set image.repository=602401143452.dkr.ecr.${AWS_REGION}.amazonaws.com/amazon/appmesh-controller \
       --set region=${AWS_REGION} \
 
 else
