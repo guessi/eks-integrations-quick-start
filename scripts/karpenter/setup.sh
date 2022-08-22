@@ -8,18 +8,19 @@ ROLE_NAME="${EKS_CLUSTER_NAME}-karpenter"
 
 # CHART VERSION	APP VERSION
 # ---------------------------
-# 0.14.0        	0.14.0
-# 0.13.2        	0.13.2
-# 0.13.1        	0.13.1
-# 0.13.0        	0.13.0   # do not use, ref: https://github.com/aws/karpenter/releases/tag/v0.13.0
-# 0.12.1        	0.12.1
-# 0.12.0        	0.12.0
-# 0.11.1        	0.11.1
-# 0.11.0        	0.11.0   # do not use, ref: https://github.com/aws/karpenter/pull/1940
-# 0.10.1        	0.10.1
+# 0.15.0        	0.15.0   # ref: https://github.com/aws/karpenter/releases/tag/v0.15.0
+# 0.14.0        	0.14.0   # ref: https://github.com/aws/karpenter/releases/tag/v0.14.0
+# 0.13.2        	0.13.2   # ref: https://github.com/aws/karpenter/releases/tag/v0.13.2
+# 0.13.1        	0.13.1   # ref: https://github.com/aws/karpenter/releases/tag/v0.13.1
+# 0.13.0        	0.13.0   # ref: https://github.com/aws/karpenter/releases/tag/v0.13.0 (do not use)
+# 0.12.1        	0.12.1   # ref: https://github.com/aws/karpenter/releases/tag/v0.12.1
+# 0.12.0        	0.12.0   # ref: https://github.com/aws/karpenter/releases/tag/v0.12.0
+# 0.11.1        	0.11.1   # ref: https://github.com/aws/karpenter/releases/tag/v0.11.1
+# 0.11.0        	0.11.0   # ref: https://github.com/aws/karpenter/releases/tag/v0.11.0 (do not use, ref: https://github.com/aws/karpenter/pull/1940)
+# 0.10.1        	0.10.1   # ref: https://github.com/aws/karpenter/releases/tag/v0.10.1
 
-APP_VERSION="0.14.0"
-CHART_VERSION="0.14.0"
+APP_VERSION="0.15.0"
+CHART_VERSION="0.15.0"
 
 echo "[debug] detecting AWS Account ID"
 export AWS_ACCOUNT_ID=$(aws sts get-caller-identity --query Account --output text)
