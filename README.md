@@ -21,6 +21,7 @@ Quick start scripts for installing EKS addons with helm charts.
 - [AWS EFS CSI Driver](./scripts/aws-efs-csi-driver/)
 - [AWS FSx CSI Driver](./scripts/aws-fsx-csi-driver/)
 - [AWS Load Balancer Controller](./scripts/aws-load-balancer-controller/)
+- [AWS Node Termination Handler](./scripts/aws-node-termination-handler/)
 - [App Mesh Controller](./scripts/appmesh-controller/)
 - [Cert Manager](./scripts/cert-manager/)
 - [Cluster AutoScaler](./scripts/cluster-autoscaler/)
