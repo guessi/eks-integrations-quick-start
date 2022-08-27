@@ -23,7 +23,7 @@ SERVICE_ACCOUNT_NAME="aws-load-balancer-controller"
 #
 # ref: https://kubernetes-sigs.github.io/aws-load-balancer-controller/v2.4/deploy/installation/#kubernetes-version-requirements
 
-# APP_VERSION="v2.4.3"
+APP_VERSION="v2.4.3"
 CHART_VERSION="1.4.4"
 
 echo "[debug] detecting AWS Account ID"
@@ -86,6 +86,7 @@ if [ $? -ne 0 ]; then
       --set serviceAccount.create=false \
       --set serviceAccount.name=${SERVICE_ACCOUNT_NAME} \
       --set image.repository=602401143452.dkr.ecr.${AWS_REGION}.amazonaws.com/amazon/aws-load-balancer-controller \
+      --set image.tag=${APP_VERSION} \
       --set clusterName=${EKS_CLUSTER_NAME} \
       --set region=${AWS_REGION} \
       --set VpcId=${VPC_ID}
