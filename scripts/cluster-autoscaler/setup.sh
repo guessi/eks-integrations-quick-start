@@ -57,7 +57,7 @@ echo "[debug] detecting Helm resource existance"
 helm list --all-namespaces | grep -q 'cluster-autoscaler'
 
 if [ $? -ne 0 ]; then
-  echo "[debug] setup eks/cluster-autoscaler"
+  echo "[debug] setup autoscaler/cluster-autoscaler"
   helm upgrade \
     --namespace kube-system \
     --install cluster-autoscaler \
