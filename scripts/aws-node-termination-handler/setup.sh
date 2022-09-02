@@ -6,10 +6,12 @@ EKS_CLUSTER_NAME="eks-demo"
 # CHART VERSION	APP VERSION
 # ---------------------------
 # CHART VERSION	APP VERSION
+# 0.19.2       	1.17.2      # ref: https://github.com/aws/aws-node-termination-handler/releases/tag/v1.17.2
+# 0.19.1       	1.17.1      # ref: https://github.com/aws/aws-node-termination-handler/releases/tag/v1.17.1
 # 0.19.0       	1.17.0      # ref: https://github.com/aws/aws-node-termination-handler/releases/tag/v1.17.0
 
-# APP_VERSION="1.17.0"
-CHART_VERSION="0.19.0"
+# APP_VERSION="1.17.2"
+CHART_VERSION="0.19.2"
 
 echo "[debug] detecting chart repo existance"
 helm repo list | grep -q 'eks-charts'
