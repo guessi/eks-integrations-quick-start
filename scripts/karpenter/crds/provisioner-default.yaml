@@ -1,0 +1,46 @@
+apiVersion: karpenter.sh/v1alpha5
+kind: Provisioner
+metadata:
+  name: default
+spec:
+  consolidation:
+    enabled: true
+  providerRef:
+    name: default
+  kubeletConfiguration:
+    containerRuntime: containerd
+  limits:
+    resources:
+      cpu: 1000
+      memory: 1000Gi
+  requirements:
+  - key: karpenter.sh/capacity-type
+    operator: In
+    values:
+    - spot
+    # - on-demand
+  - key: kubernetes.io/arch
+    operator: In
+    values:
+    - amd64
+    # - arm64
+  - key: karpenter.k8s.aws/instance-family
+    operator: In
+    values:
+    - t3
+    - t3a
+  - key: karpenter.k8s.aws/instance-cpu
+    operator: Lt
+    values:
+    - "9"
+  - key: karpenter.k8s.aws/instance-memory
+    operator: Lt
+    values:
+    - "16385"
+  - key: karpenter.k8s.aws/instance-size
+    operator: NotIn # avoid instance-size too small
+    values:
+    - nano
+    - micro
+  # ttlSecondsAfterEmpty: 30
+  ttlSecondsUntilExpired: 2592000
