@@ -88,23 +88,19 @@ eksctl create iamserviceaccount \
 echo "[debug] detecting Helm resource existance"
 helm list --all-namespaces | grep -q 'karpenter'
 
-if [ $? -ne 0 ]; then
-  echo "[debug] setup karpenter/karpenter"
-  helm upgrade \
-    --namespace karpenter \
-    --install karpenter \
-    --version ${CHART_VERSION} \
-    karpenter/karpenter \
-      --set serviceAccount.create=false \
-      --set serviceAccount.name=${SERVICE_ACCOUNT_NAME} \
-      --set serviceAccount.annotations."eks\.amazonaws\.com/role-arn"="arn:aws:iam::${AWS_ACCOUNT_ID}:role/${ROLE_NAME}" \
-      --set clusterName=${EKS_CLUSTER_NAME} \
-      --set clusterEndpoint=${CLUSTER_ENDPOINT} \
-      --set aws.defaultInstanceProfile=KarpenterNodeInstanceProfile-${EKS_CLUSTER_NAME} \
-      --wait # for the defaulting webhook to install before creating a Provisioner
-else
-  echo "[debug] Helm resource existed"
-fi
+echo "[debug] setup karpenter/karpenter"
+helm upgrade \
+  --namespace karpenter \
+  --install karpenter \
+  --version ${CHART_VERSION} \
+  karpenter/karpenter \
+    --set serviceAccount.create=false \
+    --set serviceAccount.name=${SERVICE_ACCOUNT_NAME} \
+    --set serviceAccount.annotations."eks\.amazonaws\.com/role-arn"="arn:aws:iam::${AWS_ACCOUNT_ID}:role/${ROLE_NAME}" \
+    --set clusterName=${EKS_CLUSTER_NAME} \
+    --set clusterEndpoint=${CLUSTER_ENDPOINT} \
+    --set aws.defaultInstanceProfile=KarpenterNodeInstanceProfile-${EKS_CLUSTER_NAME} \
+    --wait # for the defaulting webhook to install before creating a Provisioner
 
 echo "[debug] listing installed"
 helm list --all-namespaces --filter karpenter

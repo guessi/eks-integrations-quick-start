@@ -23,19 +23,15 @@ helm repo update jetstack
 echo "[debug] detecting Helm resource existance"
 helm list --all-namespaces | grep -q 'cert-manager'
 
-if [ $? -ne 0 ]; then
-  echo "[debug] setup cert-manager"
-  helm upgrade \
+echo "[debug] setup jetstack/cert-manager"
+helm upgrade \
+  --namespace cert-manager \
+  --install cert-manager \
+  jetstack/cert-manager \
     --namespace cert-manager \
-    --install cert-manager \
-    jetstack/cert-manager \
-      --namespace cert-manager \
-      --create-namespace \
-      --version ${CHART_VERSION} \
-      --set installCRDs=true
-else
-  echo "[debug] Helm resource existed"
-fi
+    --create-namespace \
+    --version ${CHART_VERSION} \
+    --set installCRDs=true
 
 echo "[debug] listing installed"
 helm list --all-namespaces --filter cert-manager

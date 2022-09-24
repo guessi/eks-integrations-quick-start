@@ -48,19 +48,15 @@ eksctl create iamserviceaccount \
 echo "[debug] detecting Helm resource existance"
 helm list --all-namespaces | grep -q 'aws-efs-csi-driver/aws-efs-csi-driver'
 
-if [ $? -ne 0 ]; then
-  # TODO: nice to have regional image setup
-  echo "[debug] setup aws-efs-csi-driver/aws-efs-csi-driver"
-  helm upgrade \
-    --namespace kube-system \
-    --install aws-efs-csi-driver \
-    aws-efs-csi-driver/aws-efs-csi-driver \
-      --set controller.serviceAccount.create=false \
-      --set controller.serviceAccount.name=${SERVICE_ACCOUNT_NAME} \
-      --set image.repository=602401143452.dkr.ecr.${AWS_REGION}.amazonaws.com/eks/aws-efs-csi-driver
-else
-  echo "[debug] Helm resource existed"
-fi
+# TODO: nice to have regional image setup
+echo "[debug] setup aws-efs-csi-driver/aws-efs-csi-driver"
+helm upgrade \
+  --namespace kube-system \
+  --install aws-efs-csi-driver \
+  aws-efs-csi-driver/aws-efs-csi-driver \
+    --set controller.serviceAccount.create=false \
+    --set controller.serviceAccount.name=${SERVICE_ACCOUNT_NAME} \
+    --set image.repository=602401143452.dkr.ecr.${AWS_REGION}.amazonaws.com/eks/aws-efs-csi-driver
 
 echo "[debug] listing installed"
 helm list --all-namespaces --filter aws-efs-csi-driver

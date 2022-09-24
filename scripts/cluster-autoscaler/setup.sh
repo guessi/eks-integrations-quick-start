@@ -56,21 +56,17 @@ eksctl create iamserviceaccount \
 echo "[debug] detecting Helm resource existance"
 helm list --all-namespaces | grep -q 'cluster-autoscaler'
 
-if [ $? -ne 0 ]; then
-  echo "[debug] setup autoscaler/cluster-autoscaler"
-  helm upgrade \
-    --namespace kube-system \
-    --install cluster-autoscaler \
-    autoscaler/cluster-autoscaler \
-      --set awsRegion=${AWS_REGION} \
-      --set rbac.serviceAccount.create=false \
-      --set rbac.serviceAccount.name=${SERVICE_ACCOUNT_NAME} \
-      --set autoDiscovery.clusterName=${EKS_CLUSTER_NAME} \
-      --set fullnameOverride="cluster-autoscaler" \
-      --set image.tag="${CLUSTER_AUTOSCALER_IMAGE_TAG}"
-else
-  echo "[debug] Helm resource existed"
-fi
+echo "[debug] setup autoscaler/cluster-autoscaler"
+helm upgrade \
+  --namespace kube-system \
+  --install cluster-autoscaler \
+  autoscaler/cluster-autoscaler \
+    --set awsRegion=${AWS_REGION} \
+    --set rbac.serviceAccount.create=false \
+    --set rbac.serviceAccount.name=${SERVICE_ACCOUNT_NAME} \
+    --set autoDiscovery.clusterName=${EKS_CLUSTER_NAME} \
+    --set fullnameOverride="cluster-autoscaler" \
+    --set image.tag="${CLUSTER_AUTOSCALER_IMAGE_TAG}"
 
 echo "[debug] listing installed"
 helm list --all-namespaces --filter cluster-autoscaler

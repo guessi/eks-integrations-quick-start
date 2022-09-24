@@ -16,15 +16,11 @@ helm repo update metrics-server
 echo "[debug] detecting Helm resource existance"
 helm list --all-namespaces | grep -q 'metrics-server'
 
-if [ $? -ne 0 ]; then
-  echo "[debug] setup metrics-server"
-  helm upgrade \
-    --namespace kube-system \
-    --install metrics-server \
-    metrics-server/metrics-server
-else
-  echo "[debug] Helm resource existed"
-fi
+echo "[debug] setup metrics-server/metrics-server"
+helm upgrade \
+  --namespace kube-system \
+  --install metrics-server \
+  metrics-server/metrics-server
 
 echo "[debug] listing installed"
 helm list --all-namespaces --filter metrics-server

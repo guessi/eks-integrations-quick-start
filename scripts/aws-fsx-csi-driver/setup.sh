@@ -48,17 +48,13 @@ eksctl create iamserviceaccount \
 echo "[debug] detecting Helm resource existance"
 helm list --all-namespaces | grep -q 'aws-fsx-csi-driver/aws-fsx-csi-driver'
 
-if [ $? -ne 0 ]; then
-  echo "[debug] setup aws-fsx-csi-driver/aws-fsx-csi-driver"
-  helm upgrade \
-    --namespace kube-system \
-    --install aws-fsx-csi-driver \
-    aws-fsx-csi-driver/aws-fsx-csi-driver \
-      --set controller.serviceAccount.create=false \
-      --set controller.serviceAccount.name=${SERVICE_ACCOUNT_NAME}
-else
-  echo "[debug] Helm resource existed"
-fi
+echo "[debug] setup aws-fsx-csi-driver/aws-fsx-csi-driver"
+helm upgrade \
+  --namespace kube-system \
+  --install aws-fsx-csi-driver \
+  aws-fsx-csi-driver/aws-fsx-csi-driver \
+    --set controller.serviceAccount.create=false \
+    --set controller.serviceAccount.name=${SERVICE_ACCOUNT_NAME}
 
 echo "[debug] listing installed"
 helm list --all-namespaces --filter aws-fsx-csi-driver

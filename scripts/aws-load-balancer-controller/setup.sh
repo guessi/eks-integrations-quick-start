@@ -76,24 +76,20 @@ kubectl apply -k "github.com/aws/eks-charts/stable/aws-load-balancer-controller/
 echo "[debug] detecting Helm resource existance"
 helm list --all-namespaces | grep -q 'aws-load-balancer-controller'
 
-if [ $? -ne 0 ]; then
-  # TODO: nice to have regional image setup
-  echo "[debug] setup eks/aws-load-balancer-controller"
-  helm upgrade \
-    --namespace kube-system \
-    --install aws-load-balancer-controller \
-    --version ${CHART_VERSION} \
-    eks/aws-load-balancer-controller \
-      --set serviceAccount.create=false \
-      --set serviceAccount.name=${SERVICE_ACCOUNT_NAME} \
-      --set image.repository=602401143452.dkr.ecr.${AWS_REGION}.amazonaws.com/amazon/aws-load-balancer-controller \
-      --set image.tag=${APP_VERSION} \
-      --set clusterName=${EKS_CLUSTER_NAME} \
-      --set region=${AWS_REGION} \
-      --set VpcId=${VPC_ID}
-else
-  echo "[debug] Helm resource existed"
-fi
+# TODO: nice to have regional image setup
+echo "[debug] setup eks/aws-load-balancer-controller"
+helm upgrade \
+  --namespace kube-system \
+  --install aws-load-balancer-controller \
+  --version ${CHART_VERSION} \
+  eks/aws-load-balancer-controller \
+    --set serviceAccount.create=false \
+    --set serviceAccount.name=${SERVICE_ACCOUNT_NAME} \
+    --set image.repository=602401143452.dkr.ecr.${AWS_REGION}.amazonaws.com/amazon/aws-load-balancer-controller \
+    --set image.tag=${APP_VERSION} \
+    --set clusterName=${EKS_CLUSTER_NAME} \
+    --set region=${AWS_REGION} \
+    --set VpcId=${VPC_ID}
 
 echo "[debug] listing installed"
 helm list --all-namespaces --filter aws-load-balancer-controller
