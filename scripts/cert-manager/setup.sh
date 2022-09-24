@@ -3,26 +3,9 @@
 # CHART VERSION	APP VERSION
 # v1.9.1       	v1.9.1
 # v1.9.0       	v1.9.0
-# v1.8.2       	v1.8.2
-# v1.8.1       	v1.8.1
-# v1.8.0       	v1.8.0
-# v1.7.2       	v1.7.2
-# v1.7.1       	v1.7.1
-# v1.7.0       	v1.7.0
-# v1.6.3       	v1.6.3
-# v1.6.2       	v1.6.2
-# v1.6.1       	v1.6.1
-# v1.6.0       	v1.6.0
-# v1.5.5       	v1.5.5
-# v1.5.4       	v1.5.4
-# v1.5.3       	v1.5.3
-# v1.5.2       	v1.5.2
-# v1.5.1       	v1.5.1
-# v1.5.0       	v1.5.0
 
-# Pin version to 1.5.x to avoid api break
-# - https://cert-manager.io/docs/release-notes/release-notes-1.6#v160
-CHART_VERSION="v1.5.5"
+APP_VERSION="1.9.1"
+CHART_VERSION="v1.9.1"
 
 echo "[debug] detecting chart repo existance"
 helm repo list | grep -q 'cert-manager'
