@@ -89,7 +89,7 @@ helm upgrade \
     --set image.tag=${APP_VERSION} \
     --set clusterName=${EKS_CLUSTER_NAME} \
     --set region=${AWS_REGION} \
-    --set VpcId=${VPC_ID}
+    --set vpcId=${VPC_ID}
 
 echo "[debug] listing installed"
 helm list --all-namespaces --filter aws-load-balancer-controller
