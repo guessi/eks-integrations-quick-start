@@ -7,6 +7,7 @@ SERVICE_ACCOUNT_NAME="aws-load-balancer-controller"
 
 # CHART VERSION	APP VERSION
 # ---------------------------
+# 1.4.5        	v2.4.4
 # 1.4.4        	v2.4.3
 # 1.4.3        	v2.4.2
 # 1.4.2        	v2.4.2
@@ -23,8 +24,8 @@ SERVICE_ACCOUNT_NAME="aws-load-balancer-controller"
 #
 # ref: https://kubernetes-sigs.github.io/aws-load-balancer-controller/v2.4/deploy/installation/#kubernetes-version-requirements
 
-APP_VERSION="v2.4.3"
-CHART_VERSION="1.4.4"
+APP_VERSION="v2.4.4"
+CHART_VERSION="1.4.5"
 
 echo "[debug] detecting AWS Account ID"
 export AWS_ACCOUNT_ID=$(aws sts get-caller-identity --query Account --output text)
