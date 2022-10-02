@@ -10,7 +10,7 @@ Quick start scripts for installing EKS addons with helm charts.
 
 ## Assumptions
 
-- An AWS profile existed with name `default`, and `AdministratorAccess` permission configured
+- Your AWS Profile have proper permission configured.
 - All the tools required were setup properly
 - All the resources are under `us-east-1`
 - The cluster name would be `eks-demo`
