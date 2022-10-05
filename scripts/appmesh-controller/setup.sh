@@ -26,8 +26,11 @@ SERVICE_ACCOUNT_NAME="appmesh-controller"
 # 1.2.2        	1.2.1
 # 1.2.1        	1.2.1
 
-# APP_VERSION="1.7.0"
+APP_VERSION="1.7.0"
 CHART_VERSION="1.7.0"
+CONTROLLER_IMAGE_TAG="v1.7.0"
+SIDECAR_IMAGE_TAG="v1.22.2.1-prod"
+INIT_IMAGE_TAG="v6-prod"
 
 echo "[debug] detecting AWS Account ID"
 export AWS_ACCOUNT_ID=$(aws sts get-caller-identity --query Account --output text)
@@ -88,21 +91,27 @@ kubectl apply -k "github.com/aws/eks-charts/stable/appmesh-controller//crds?ref=
 echo "[debug] detecting Helm resource existance"
 helm list --all-namespaces | grep -q 'appmesh-controller'
 
-if [ $? -ne 0 ]; then
-  # TODO: nice to have regional image setup
-  echo "[debug] setup eks/appmesh-controller"
-  helm upgrade \
-    --namespace appmesh-system \
-    --install appmesh-controller \
-    --version ${CHART_VERSION} \
-    eks/appmesh-controller \
-      --set serviceAccount.create=false \
-      --set serviceAccount.name=${SERVICE_ACCOUNT_NAME} \
-      --set region=${AWS_REGION} \
+# TODO: nice to have regional image setup
+echo "[debug] setup eks/appmesh-controller"
+helm upgrade \
+  --namespace appmesh-system \
+  --install appmesh-controller \
+  --version ${CHART_VERSION} \
+  eks/appmesh-controller \
+    --set serviceAccount.create=false \
+    --set serviceAccount.name=${SERVICE_ACCOUNT_NAME} \
+    --set image.repository=602401143452.dkr.ecr.${AWS_REGION}.amazonaws.com/amazon/appmesh-controller \
+    --set image.tag=${CONTROLLER_IMAGE_TAG} \
+    --set sidecar.image.repository=602401143452.dkr.ecr.${AWS_REGION}.amazonaws.com/aws-appmesh-envoy \
+    --set sidecar.image.tag=${SIDECAR_IMAGE_TAG} \
+    --set init.image.repository=602401143452.dkr.ecr.${AWS_REGION}.amazonaws.com/aws-appmesh-proxy-route-manager \
+    --set init.image.tag=${INIT_IMAGE_TAG} \
+    --set region=${AWS_REGION}
 
-else
-  echo "[debug] Helm resource existed"
-fi
+# the attributes above are copied from https://github.com/aws/eks-charts/blob/v0.0.108/stable/appmesh-controller/values.yaml (v0.0.108 is mapped to CHART_VERSION v1.7.0)
+# whenever you changed the CHART_VERSION or APP_VERSION, you should double confirm whether the version is you would like to install.
+# and don't foget the chagne the account number "602401143452" above if you are not running with "us-east-1".
+# ref: https://docs.aws.amazon.com/app-mesh/latest/userguide/getting-started-kubernetes.html#install-controller
 
 echo "[debug] listing installed"
 helm list --all-namespaces --filter appmesh-controller
