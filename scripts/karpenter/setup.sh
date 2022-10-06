@@ -6,6 +6,20 @@ POLICY_NAME="KarpenterControllerPolicy-${EKS_CLUSTER_NAME}"
 SERVICE_ACCOUNT_NAME="karpenter"
 ROLE_NAME="${EKS_CLUSTER_NAME}-karpenter"
 
+# Breaking change notices:
+# - Karpenter version >= 0.17.0
+#   - chart source comes from karpenter/karpenter
+#   - chart version formatted as "karpenter-v${VERSION}"
+#   - required helm version >= 3.8
+#
+# - Karpenter version < 0.17.0
+#   - chart source comes from oci://public.ecr.aws/karpenter/karpenter
+#   - chart version formatted as "${VERSION}"
+
+# CHART VERSION	             APP VERSION
+# ----------------------------------------
+# karpenter-v0.17.0        	0.17.0   # ref: https://github.com/aws/karpenter/releases/tag/v0.17.0
+
 # CHART VERSION	APP VERSION
 # ---------------------------
 # 0.16.3        	0.16.3   # ref: https://github.com/aws/karpenter/releases/tag/v0.16.3
@@ -23,8 +37,8 @@ ROLE_NAME="${EKS_CLUSTER_NAME}-karpenter"
 # 0.11.0        	0.11.0   # ref: https://github.com/aws/karpenter/releases/tag/v0.11.0 (do not use, ref: https://github.com/aws/karpenter/pull/1940)
 # 0.10.1        	0.10.1   # ref: https://github.com/aws/karpenter/releases/tag/v0.10.1
 
-APP_VERSION="0.16.3"
-CHART_VERSION="0.16.3"
+APP_VERSION="0.17.0"
+CHART_VERSION="0.17.0"
 
 echo "[debug] detecting AWS Account ID"
 export AWS_ACCOUNT_ID=$(aws sts get-caller-identity --query Account --output text)
@@ -86,15 +100,20 @@ eksctl create iamserviceaccount \
   --approve \
   --override-existing-serviceaccounts
 
+echo "[debug] creating Custom Resource Definition (CRDs)"
+kubectl apply -f https://raw.githubusercontent.com/aws/karpenter/v${CHART_VERSION}/charts/karpenter/crds/karpenter.sh_provisioners.yaml
+kubectl apply -f https://raw.githubusercontent.com/aws/karpenter/v${CHART_VERSION}/charts/karpenter/crds/karpenter.k8s.aws_awsnodetemplates.yaml
+
 echo "[debug] detecting Helm resource existance"
 helm list --all-namespaces | grep -q 'karpenter'
 
 echo "[debug] setup karpenter/karpenter"
 helm upgrade \
   --namespace karpenter \
+  --create-namespace \
   --install karpenter \
-  --version ${CHART_VERSION} \
-  karpenter/karpenter \
+  --version v${CHART_VERSION} \
+  oci://public.ecr.aws/karpenter/karpenter \
     --set serviceAccount.create=false \
     --set serviceAccount.name=${SERVICE_ACCOUNT_NAME} \
     --set serviceAccount.annotations."eks\.amazonaws\.com/role-arn"="arn:aws:iam::${AWS_ACCOUNT_ID}:role/${ROLE_NAME}" \
