@@ -17,8 +17,8 @@ spec:
   - key: karpenter.sh/capacity-type
     operator: In
     values:
-    - spot
-    # - on-demand
+    - on-demand
+    # - spot
   - key: kubernetes.io/arch
     operator: In
     values:
@@ -27,16 +27,24 @@ spec:
   - key: karpenter.k8s.aws/instance-family
     operator: In
     values:
+    - t2
     - t3
     - t3a
+    - m4
+    - m5
+    - m5a
+    - m6a
+    - m6i
   - key: karpenter.k8s.aws/instance-cpu
     operator: Lt
     values:
-    - "9"
+    - "17" # 16 + 1
   - key: karpenter.k8s.aws/instance-memory
     operator: Lt
     values:
-    - "16385"
+    # - "16385" # 16 * 1024 + 1
+    # - "32769" # 32 * 1024 + 1
+    - "65537" # 64 * 1024 + 1
   - key: karpenter.k8s.aws/instance-size
     operator: NotIn # avoid instance-size too small
     values:
