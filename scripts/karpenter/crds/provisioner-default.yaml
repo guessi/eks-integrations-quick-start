@@ -27,11 +27,8 @@ spec:
   - key: karpenter.k8s.aws/instance-family
     operator: In
     values:
-    - t2
-    - t3
     - t3a
     - m4
-    - m5
     - m5a
     - m6a
     - m6i
