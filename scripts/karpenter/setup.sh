@@ -7,6 +7,9 @@ SERVICE_ACCOUNT_NAME="karpenter"
 ROLE_NAME="${EKS_CLUSTER_NAME}-karpenter"
 
 # Breaking change notices:
+# - Karpenter version >= 0.19.0
+#   - https://karpenter.sh/v0.19.0/upgrade-guide/#upgrading-to-v0190
+#
 # - Karpenter version >= 0.17.0
 #   - chart source comes from karpenter/karpenter
 #   - chart version formatted as "karpenter-v${VERSION}"
@@ -18,29 +21,13 @@ ROLE_NAME="${EKS_CLUSTER_NAME}-karpenter"
 
 # CHART VERSION	             APP VERSION
 # ----------------------------------------
+# karpenter-v0.19.0        	0.19.0   # ref: https://github.com/aws/karpenter/releases/tag/v0.19.0
 # karpenter-v0.18.1        	0.18.1   # ref: https://github.com/aws/karpenter/releases/tag/v0.18.1
 # karpenter-v0.18.0        	0.18.0   # ref: https://github.com/aws/karpenter/releases/tag/v0.18.0
 # karpenter-v0.17.0        	0.17.0   # ref: https://github.com/aws/karpenter/releases/tag/v0.17.0
 
-# CHART VERSION	APP VERSION
-# ---------------------------
-# 0.16.3        	0.16.3   # ref: https://github.com/aws/karpenter/releases/tag/v0.16.3
-# 0.16.2        	0.16.2   # ref: https://github.com/aws/karpenter/releases/tag/v0.16.2
-# 0.16.1        	0.16.1   # ref: https://github.com/aws/karpenter/releases/tag/v0.16.1
-# 0.16.0        	0.16.0   # ref: https://github.com/aws/karpenter/releases/tag/v0.16.0
-# 0.15.0        	0.15.0   # ref: https://github.com/aws/karpenter/releases/tag/v0.15.0
-# 0.14.0        	0.14.0   # ref: https://github.com/aws/karpenter/releases/tag/v0.14.0
-# 0.13.2        	0.13.2   # ref: https://github.com/aws/karpenter/releases/tag/v0.13.2
-# 0.13.1        	0.13.1   # ref: https://github.com/aws/karpenter/releases/tag/v0.13.1
-# 0.13.0        	0.13.0   # ref: https://github.com/aws/karpenter/releases/tag/v0.13.0 (do not use)
-# 0.12.1        	0.12.1   # ref: https://github.com/aws/karpenter/releases/tag/v0.12.1
-# 0.12.0        	0.12.0   # ref: https://github.com/aws/karpenter/releases/tag/v0.12.0
-# 0.11.1        	0.11.1   # ref: https://github.com/aws/karpenter/releases/tag/v0.11.1
-# 0.11.0        	0.11.0   # ref: https://github.com/aws/karpenter/releases/tag/v0.11.0 (do not use, ref: https://github.com/aws/karpenter/pull/1940)
-# 0.10.1        	0.10.1   # ref: https://github.com/aws/karpenter/releases/tag/v0.10.1
-
-APP_VERSION="0.18.1"
-CHART_VERSION="0.18.1"
+APP_VERSION="0.19.0"
+CHART_VERSION="0.19.0"
 
 echo "[debug] detecting AWS Account ID"
 export AWS_ACCOUNT_ID=$(aws sts get-caller-identity --query Account --output text)
@@ -103,26 +90,49 @@ eksctl create iamserviceaccount \
   --override-existing-serviceaccounts
 
 echo "[debug] creating Custom Resource Definition (CRDs)"
-kubectl apply -f https://raw.githubusercontent.com/aws/karpenter/v${CHART_VERSION}/charts/karpenter/crds/karpenter.sh_provisioners.yaml
-kubectl apply -f https://raw.githubusercontent.com/aws/karpenter/v${CHART_VERSION}/charts/karpenter/crds/karpenter.k8s.aws_awsnodetemplates.yaml
+if [ "${CHART_VERSION}" == "0.19.0" ]; then
+  kubectl apply -f https://raw.githubusercontent.com/aws/karpenter/v${CHART_VERSION}/pkg/apis/crds/karpenter.sh_provisioners.yaml
+  kubectl apply -f https://raw.githubusercontent.com/aws/karpenter/v${CHART_VERSION}/pkg/apis/crds/karpenter.k8s.aws_awsnodetemplates.yaml
+else
+  kubectl apply -f https://raw.githubusercontent.com/aws/karpenter/v${CHART_VERSION}/charts/karpenter/crds/karpenter.sh_provisioners.yaml
+  kubectl apply -f https://raw.githubusercontent.com/aws/karpenter/v${CHART_VERSION}/charts/karpenter/crds/karpenter.k8s.aws_awsnodetemplates.yaml
+fi
 
 echo "[debug] detecting Helm resource existance"
 helm list --all-namespaces | grep -q 'karpenter'
 
 echo "[debug] setup karpenter/karpenter"
-helm upgrade \
-  --namespace karpenter \
-  --create-namespace \
-  --install karpenter \
-  --version v${CHART_VERSION} \
-  oci://public.ecr.aws/karpenter/karpenter \
-    --set serviceAccount.create=false \
-    --set serviceAccount.name=${SERVICE_ACCOUNT_NAME} \
-    --set serviceAccount.annotations."eks\.amazonaws\.com/role-arn"="arn:aws:iam::${AWS_ACCOUNT_ID}:role/${ROLE_NAME}" \
-    --set clusterName=${EKS_CLUSTER_NAME} \
-    --set clusterEndpoint=${CLUSTER_ENDPOINT} \
-    --set aws.defaultInstanceProfile=KarpenterNodeInstanceProfile-${EKS_CLUSTER_NAME} \
-    --wait # for the defaulting webhook to install before creating a Provisioner
+
+if [ "${CHART_VERSION}" == "0.19.0" ]; then
+  helm upgrade \
+    --namespace karpenter \
+    --create-namespace \
+    --install karpenter \
+    --version v${CHART_VERSION} \
+    oci://public.ecr.aws/karpenter/karpenter \
+      --set serviceAccount.create=false \
+      --set serviceAccount.name=${SERVICE_ACCOUNT_NAME} \
+      --set serviceAccount.annotations."eks\.amazonaws\.com/role-arn"="arn:aws:iam::${AWS_ACCOUNT_ID}:role/${ROLE_NAME}" \
+      --set settings.aws.clusterName=${EKS_CLUSTER_NAME} \
+      --set settings.aws.clusterEndpoint=${CLUSTER_ENDPOINT} \
+      --set settings.aws.defaultInstanceProfile=KarpenterNodeInstanceProfile-${EKS_CLUSTER_NAME} \
+      --set settings.aws.interruptionQueueName=${EKS_CLUSTER_NAME} \
+      --wait
+else
+  helm upgrade \
+    --namespace karpenter \
+    --create-namespace \
+    --install karpenter \
+    --version v${CHART_VERSION} \
+    oci://public.ecr.aws/karpenter/karpenter \
+      --set serviceAccount.create=false \
+      --set serviceAccount.name=${SERVICE_ACCOUNT_NAME} \
+      --set serviceAccount.annotations."eks\.amazonaws\.com/role-arn"="arn:aws:iam::${AWS_ACCOUNT_ID}:role/${ROLE_NAME}" \
+      --set clusterName=${EKS_CLUSTER_NAME} \
+      --set clusterEndpoint=${CLUSTER_ENDPOINT} \
+      --set aws.defaultInstanceProfile=KarpenterNodeInstanceProfile-${EKS_CLUSTER_NAME} \
+      --wait # for the defaulting webhook to install before creating a Provisioner
+fi
 
 echo "[debug] listing installed"
 helm list --all-namespaces --filter karpenter
