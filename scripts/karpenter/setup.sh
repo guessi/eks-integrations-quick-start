@@ -21,13 +21,14 @@ ROLE_NAME="${EKS_CLUSTER_NAME}-karpenter"
 
 # CHART VERSION	             APP VERSION
 # ----------------------------------------
+# karpenter-v0.19.1        	0.19.1   # ref: https://github.com/aws/karpenter/releases/tag/v0.19.1
 # karpenter-v0.19.0        	0.19.0   # ref: https://github.com/aws/karpenter/releases/tag/v0.19.0
 # karpenter-v0.18.1        	0.18.1   # ref: https://github.com/aws/karpenter/releases/tag/v0.18.1
 # karpenter-v0.18.0        	0.18.0   # ref: https://github.com/aws/karpenter/releases/tag/v0.18.0
 # karpenter-v0.17.0        	0.17.0   # ref: https://github.com/aws/karpenter/releases/tag/v0.17.0
 
-APP_VERSION="0.19.0"
-CHART_VERSION="0.19.0"
+APP_VERSION="0.19.1"
+CHART_VERSION="0.19.1"
 
 echo "[debug] detecting AWS Account ID"
 export AWS_ACCOUNT_ID=$(aws sts get-caller-identity --query Account --output text)
@@ -90,7 +91,7 @@ eksctl create iamserviceaccount \
   --override-existing-serviceaccounts
 
 echo "[debug] creating Custom Resource Definition (CRDs)"
-if [ "${CHART_VERSION}" == "0.19.0" ]; then
+if [ "${CHART_VERSION}" == "0.19.0" ] || [ "${CHART_VERSION}" == "0.19.1" ]; then
   kubectl apply -f https://raw.githubusercontent.com/aws/karpenter/v${CHART_VERSION}/pkg/apis/crds/karpenter.sh_provisioners.yaml
   kubectl apply -f https://raw.githubusercontent.com/aws/karpenter/v${CHART_VERSION}/pkg/apis/crds/karpenter.k8s.aws_awsnodetemplates.yaml
 else
@@ -103,7 +104,7 @@ helm list --all-namespaces | grep -q 'karpenter'
 
 echo "[debug] setup karpenter/karpenter"
 
-if [ "${CHART_VERSION}" == "0.19.0" ]; then
+if [ "${CHART_VERSION}" == "0.19.0" ] || [ "${CHART_VERSION}" == "0.19.1" ]; then
   helm upgrade \
     --namespace karpenter \
     --create-namespace \
