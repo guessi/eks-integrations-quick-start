@@ -7,6 +7,7 @@ SERVICE_ACCOUNT_NAME="appmesh-controller"
 
 # CHART VERSION	APP VERSION
 # ---------------------------
+# 1.9.0        	1.9.0
 # 1.7.0        	1.7.0
 # 1.6.0        	1.6.0
 # 1.5.1        	1.5.1
@@ -26,9 +27,9 @@ SERVICE_ACCOUNT_NAME="appmesh-controller"
 # 1.2.2        	1.2.1
 # 1.2.1        	1.2.1
 
-APP_VERSION="1.7.0"
-CHART_VERSION="1.7.0"
-CONTROLLER_IMAGE_TAG="v1.7.0"
+APP_VERSION="1.9.0"
+CHART_VERSION="1.9.0"
+CONTROLLER_IMAGE_TAG="v1.9.0"
 SIDECAR_IMAGE_TAG="v1.22.2.1-prod"
 INIT_IMAGE_TAG="v6-prod"
 
