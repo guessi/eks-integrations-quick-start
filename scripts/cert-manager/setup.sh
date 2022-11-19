@@ -1,11 +1,13 @@
 #!/usr/bin/env bash
 
 # CHART VERSION	APP VERSION
+# ---------------------------
+# v1.10.0      	v1.10.0
 # v1.9.1       	v1.9.1
 # v1.9.0       	v1.9.0
 
-APP_VERSION="1.9.1"
-CHART_VERSION="v1.9.1"
+APP_VERSION="1.10.0"
+CHART_VERSION="v1.10.0"
 
 echo "[debug] detecting chart repo existance"
 helm repo list | grep -q 'cert-manager'
