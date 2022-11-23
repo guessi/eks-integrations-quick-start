@@ -21,14 +21,10 @@ ROLE_NAME="${EKS_CLUSTER_NAME}-karpenter"
 
 # CHART VERSION	             APP VERSION
 # ----------------------------------------
-# karpenter-v0.19.1        	0.19.1   # ref: https://github.com/aws/karpenter/releases/tag/v0.19.1
-# karpenter-v0.19.0        	0.19.0   # ref: https://github.com/aws/karpenter/releases/tag/v0.19.0
-# karpenter-v0.18.1        	0.18.1   # ref: https://github.com/aws/karpenter/releases/tag/v0.18.1
-# karpenter-v0.18.0        	0.18.0   # ref: https://github.com/aws/karpenter/releases/tag/v0.18.0
-# karpenter-v0.17.0        	0.17.0   # ref: https://github.com/aws/karpenter/releases/tag/v0.17.0
+# karpenter-v0.19.3        	0.19.3   # ref: https://github.com/aws/karpenter/releases/tag/v0.19.3
 
-APP_VERSION="0.19.1"
-CHART_VERSION="0.19.1"
+APP_VERSION="0.19.3"
+CHART_VERSION="0.19.3"
 
 echo "[debug] detecting AWS Account ID"
 export AWS_ACCOUNT_ID=$(aws sts get-caller-identity --query Account --output text)
@@ -45,19 +41,6 @@ if [ $? -ne 0 ]; then
 else
   echo "[debug] namespace existed"
 fi
-
-echo "[debug] detecting chart repo existance"
-helm repo list | grep -q 'karpenter'
-
-if [ $? -ne 0 ]; then
-  echo "[debug] setup chart repo"
-  helm repo add karpenter https://charts.karpenter.sh/ || true
-else
-  echo "[debug] found chart repo"
-fi
-
-echo "[debug] helm repo update"
-helm repo update karpenter
 
 echo "[debug] setup IAM resources"
 curl -fsSL "https://karpenter.sh/v${APP_VERSION}/getting-started/getting-started-with-eksctl/cloudformation.yaml" -O
@@ -91,49 +74,28 @@ eksctl create iamserviceaccount \
   --override-existing-serviceaccounts
 
 echo "[debug] creating Custom Resource Definition (CRDs)"
-if [ "${CHART_VERSION}" == "0.19.0" ] || [ "${CHART_VERSION}" == "0.19.1" ]; then
-  kubectl apply -f https://raw.githubusercontent.com/aws/karpenter/v${CHART_VERSION}/pkg/apis/crds/karpenter.sh_provisioners.yaml
-  kubectl apply -f https://raw.githubusercontent.com/aws/karpenter/v${CHART_VERSION}/pkg/apis/crds/karpenter.k8s.aws_awsnodetemplates.yaml
-else
-  kubectl apply -f https://raw.githubusercontent.com/aws/karpenter/v${CHART_VERSION}/charts/karpenter/crds/karpenter.sh_provisioners.yaml
-  kubectl apply -f https://raw.githubusercontent.com/aws/karpenter/v${CHART_VERSION}/charts/karpenter/crds/karpenter.k8s.aws_awsnodetemplates.yaml
-fi
+kubectl apply -f https://raw.githubusercontent.com/aws/karpenter/v${CHART_VERSION}/pkg/apis/crds/karpenter.sh_provisioners.yaml
+kubectl apply -f https://raw.githubusercontent.com/aws/karpenter/v${CHART_VERSION}/pkg/apis/crds/karpenter.k8s.aws_awsnodetemplates.yaml
 
 echo "[debug] detecting Helm resource existance"
 helm list --all-namespaces | grep -q 'karpenter'
 
 echo "[debug] setup karpenter/karpenter"
 
-if [ "${CHART_VERSION}" == "0.19.0" ] || [ "${CHART_VERSION}" == "0.19.1" ]; then
-  helm upgrade \
-    --namespace karpenter \
-    --create-namespace \
-    --install karpenter \
-    --version v${CHART_VERSION} \
-    oci://public.ecr.aws/karpenter/karpenter \
-      --set serviceAccount.create=false \
-      --set serviceAccount.name=${SERVICE_ACCOUNT_NAME} \
-      --set serviceAccount.annotations."eks\.amazonaws\.com/role-arn"="arn:aws:iam::${AWS_ACCOUNT_ID}:role/${ROLE_NAME}" \
-      --set settings.aws.clusterName=${EKS_CLUSTER_NAME} \
-      --set settings.aws.clusterEndpoint=${CLUSTER_ENDPOINT} \
-      --set settings.aws.defaultInstanceProfile=KarpenterNodeInstanceProfile-${EKS_CLUSTER_NAME} \
-      --set settings.aws.interruptionQueueName=${EKS_CLUSTER_NAME} \
-      --wait
-else
-  helm upgrade \
-    --namespace karpenter \
-    --create-namespace \
-    --install karpenter \
-    --version v${CHART_VERSION} \
-    oci://public.ecr.aws/karpenter/karpenter \
-      --set serviceAccount.create=false \
-      --set serviceAccount.name=${SERVICE_ACCOUNT_NAME} \
-      --set serviceAccount.annotations."eks\.amazonaws\.com/role-arn"="arn:aws:iam::${AWS_ACCOUNT_ID}:role/${ROLE_NAME}" \
-      --set clusterName=${EKS_CLUSTER_NAME} \
-      --set clusterEndpoint=${CLUSTER_ENDPOINT} \
-      --set aws.defaultInstanceProfile=KarpenterNodeInstanceProfile-${EKS_CLUSTER_NAME} \
-      --wait # for the defaulting webhook to install before creating a Provisioner
-fi
+helm upgrade \
+  --namespace karpenter \
+  --create-namespace \
+  --install karpenter \
+  --version v${CHART_VERSION} \
+  oci://public.ecr.aws/karpenter/karpenter \
+    --set serviceAccount.create=false \
+    --set serviceAccount.name=${SERVICE_ACCOUNT_NAME} \
+    --set serviceAccount.annotations."eks\.amazonaws\.com/role-arn"="arn:aws:iam::${AWS_ACCOUNT_ID}:role/${ROLE_NAME}" \
+    --set settings.aws.clusterName=${EKS_CLUSTER_NAME} \
+    --set settings.aws.clusterEndpoint=${CLUSTER_ENDPOINT} \
+    --set settings.aws.defaultInstanceProfile=KarpenterNodeInstanceProfile-${EKS_CLUSTER_NAME} \
+    --set settings.aws.interruptionQueueName=${EKS_CLUSTER_NAME} \
+    --wait
 
 echo "[debug] listing installed"
 helm list --all-namespaces --filter karpenter
