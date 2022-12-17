@@ -8,7 +8,6 @@ SERVICE_ACCOUNT_NAME="appmesh-controller"
 # CHART VERSION	APP VERSION
 # ---------------------------
 # 1.9.0        	1.9.0
-# 1.7.0        	1.7.0
 
 APP_VERSION="1.9.0"
 CHART_VERSION="1.9.0"

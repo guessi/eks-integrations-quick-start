@@ -6,18 +6,8 @@ POLICY_NAME="KarpenterControllerPolicy-${EKS_CLUSTER_NAME}"
 SERVICE_ACCOUNT_NAME="karpenter"
 ROLE_NAME="${EKS_CLUSTER_NAME}-karpenter"
 
-# Breaking change notices:
-# - Karpenter version >= 0.19.0
-#   - https://karpenter.sh/v0.19.0/upgrade-guide/#upgrading-to-v0190
-#
-# - Karpenter version >= 0.17.0
-#   - chart source comes from karpenter/karpenter
-#   - chart version formatted as "karpenter-v${VERSION}"
-#   - required helm version >= 3.8
-#
-# - Karpenter version < 0.17.0
-#   - chart source comes from oci://public.ecr.aws/karpenter/karpenter
-#   - chart version formatted as "${VERSION}"
+# Before upgrade, you should always check latest upgrade guide:
+# - https://karpenter.sh/preview/upgrade-guide/
 
 # CHART VERSION	             APP VERSION
 # ----------------------------------------

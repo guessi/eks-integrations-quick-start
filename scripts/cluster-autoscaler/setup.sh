@@ -12,8 +12,6 @@ CLUSTER_AUTOSCALER_IMAGE_TAG="v1.23.1"
 # - https://github.com/kubernetes/autoscaler/releases/tag/cluster-autoscaler-1.23.1
 # - https://github.com/kubernetes/autoscaler/releases/tag/cluster-autoscaler-1.22.3
 # - https://github.com/kubernetes/autoscaler/releases/tag/cluster-autoscaler-1.21.3
-# - https://github.com/kubernetes/autoscaler/releases/tag/cluster-autoscaler-1.20.3
-# - https://github.com/kubernetes/autoscaler/releases/tag/cluster-autoscaler-1.19.3
 
 echo "[debug] detecting AWS Account ID"
 export AWS_ACCOUNT_ID=$(aws sts get-caller-identity --query Account --output text)
