@@ -80,9 +80,9 @@ helm upgrade \
   eks/appmesh-controller \
     --set serviceAccount.create=false \
     --set serviceAccount.name=${SERVICE_ACCOUNT_NAME} \
-    --set image.repository=602401143452.dkr.ecr.${AWS_REGION}.amazonaws.com/amazon/appmesh-controller \
+    --set image.repository=public.ecr.aws/appmesh/appmesh-controller \
     --set image.tag=${CONTROLLER_IMAGE_TAG} \
-    --set sidecar.image.repository=602401143452.dkr.ecr.${AWS_REGION}.amazonaws.com/aws-appmesh-envoy \
+    --set sidecar.image.repository=public.ecr.aws/appmesh/aws-appmesh-envoy \
     --set sidecar.image.tag=${SIDECAR_IMAGE_TAG} \
     --set init.image.repository=602401143452.dkr.ecr.${AWS_REGION}.amazonaws.com/aws-appmesh-proxy-route-manager \
     --set init.image.tag=${INIT_IMAGE_TAG} \
