@@ -5,14 +5,15 @@ EKS_CLUSTER_NAME="eks-demo"
 POLICY_NAME="AWSAppMeshK8sControllerIAMPolicy"
 SERVICE_ACCOUNT_NAME="appmesh-controller"
 
-# CHART VERSION	APP VERSION
+# CHART VERSION APP VERSION
 # ---------------------------
-# 1.9.0        	1.9.0
+# 1.10.0        1.10.0
+# 1.9.0         1.9.0
 
-APP_VERSION="1.9.0"
-CHART_VERSION="1.9.0"
-CONTROLLER_IMAGE_TAG="v1.9.0"
-SIDECAR_IMAGE_TAG="v1.22.2.1-prod"
+APP_VERSION="1.10.0"
+CHART_VERSION="1.10.0"
+CONTROLLER_IMAGE_TAG="v1.10.0"
+SIDECAR_IMAGE_TAG="v1.24.0.0-prod"
 INIT_IMAGE_TAG="v6-prod"
 
 echo "[debug] detecting AWS Account ID"
