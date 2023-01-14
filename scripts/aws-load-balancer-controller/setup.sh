@@ -87,7 +87,7 @@ helm upgrade \
   eks/aws-load-balancer-controller \
     --set serviceAccount.create=false \
     --set serviceAccount.name=${SERVICE_ACCOUNT_NAME} \
-    --set image.repository=602401143452.dkr.ecr.${AWS_REGION}.amazonaws.com/amazon/aws-load-balancer-controller \
+    --set image.repository=public.ecr.aws/eks/aws-load-balancer-controller \
     --set image.tag=${APP_VERSION} \
     --set clusterName=${EKS_CLUSTER_NAME} \
     --set region=${AWS_REGION} \
