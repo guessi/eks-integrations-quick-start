@@ -54,7 +54,8 @@ helm upgrade \
   --install aws-fsx-csi-driver \
   aws-fsx-csi-driver/aws-fsx-csi-driver \
     --set controller.serviceAccount.create=false \
-    --set controller.serviceAccount.name=${SERVICE_ACCOUNT_NAME}
+    --set controller.serviceAccount.name=${SERVICE_ACCOUNT_NAME} \
+    --set image.repository=public.ecr.aws/fsx-csi-driver/aws-fsx-csi-driver
 
 echo "[debug] listing installed"
 helm list --all-namespaces --filter aws-fsx-csi-driver
