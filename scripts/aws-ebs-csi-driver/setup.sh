@@ -55,7 +55,7 @@ helm upgrade \
   aws-ebs-csi-driver/aws-ebs-csi-driver \
     --set controller.serviceAccount.create=false \
     --set controller.serviceAccount.name=${SERVICE_ACCOUNT_NAME} \
-    --set image.repository=602401143452.dkr.ecr.${AWS_REGION}.amazonaws.com/eks/aws-ebs-csi-driver
+    --set image.repository=public.ecr.aws/ebs-csi-driver/aws-ebs-csi-driver
 
 echo "[debug] listing installed"
 helm list --all-namespaces --filter aws-ebs-csi-driver
