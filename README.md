@@ -27,6 +27,11 @@ Quick start scripts for installing EKS addons with helm charts.
 - [Cluster AutoScaler](./scripts/cluster-autoscaler/)
 - [Karpenter](./scripts/karpenter/)
 - [Metrics Server](./scripts/metrics-server/)
+- [kube-state-metrics](./scripts/kube-state-metrics)
+- [Prometheus Node Exporter](./scripts/prometheus-node-exporter)
+- [Prometheus Pushgateway](./scripts/prometheus-pushgateway)
+- [Prometheus Alertmanager](./scripts/alertmanager)
+- [Prometheus](./scripts/prometheus)
 
 ## License
 
