@@ -32,6 +32,7 @@ Quick start scripts for installing EKS addons with helm charts.
 - [Prometheus Pushgateway](./scripts/prometheus-pushgateway)
 - [Prometheus Alertmanager](./scripts/alertmanager)
 - [Prometheus](./scripts/prometheus)
+- [Ingress Nginx Controller](./scripts/ingress-nginx-controller)
 
 ## License
 
