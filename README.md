@@ -1,6 +1,4 @@
-# eks-addons-quick-start
-
-Quick start scripts for installing EKS addons with helm charts.
+# Quick start scripts for common Amazon EKS integrations
 
 ## Prerequisites
 
@@ -11,28 +9,27 @@ Quick start scripts for installing EKS addons with helm charts.
 ## Assumptions
 
 - Your AWS Profile have proper permission configured.
-- All the tools required were setup properly
-- All the resources are under `us-east-1`
-- The cluster name would be `eks-demo`
+- The cluster name would be `eks-demo` and it's running under `us-east-1`
 
-## Supported Addons:
+## Supported integrations
 
-- [AWS EBS CSI Driver](./scripts/aws-ebs-csi-driver)
-- [AWS EFS CSI Driver](./scripts/aws-efs-csi-driver/)
-- [AWS FSx CSI Driver](./scripts/aws-fsx-csi-driver/)
-- [AWS Load Balancer Controller](./scripts/aws-load-balancer-controller/)
-- [AWS Node Termination Handler](./scripts/aws-node-termination-handler/)
-- [App Mesh Controller](./scripts/appmesh-controller/)
-- [Cert Manager](./scripts/cert-manager/)
-- [Cluster AutoScaler](./scripts/cluster-autoscaler/)
-- [Karpenter](./scripts/karpenter/)
-- [Metrics Server](./scripts/metrics-server/)
-- [kube-state-metrics](./scripts/kube-state-metrics)
-- [Prometheus Node Exporter](./scripts/prometheus-node-exporter)
-- [Prometheus Pushgateway](./scripts/prometheus-pushgateway)
-- [Prometheus Alertmanager](./scripts/alertmanager)
-- [Prometheus](./scripts/prometheus)
-- [Ingress Nginx Controller](./scripts/ingress-nginx-controller)
+| Quick Start Link                                                       | Maintained by AWS        |
+|:-----------------------------------------------------------------------|:-------------------------|
+| [Amazon EBS CSI Driver](./scripts/aws-ebs-csi-driver)                  | :white_check_mark:       |
+| [Amazon EFS CSI Driver](./scripts/aws-efs-csi-driver)                  | :white_check_mark:       |
+| [Amazon FSX CSI Driver](./scripts/aws-fsx-csi-driver)                  | :white_check_mark:       |
+| [AWS Load Balancer Controller](./scripts/aws-load-balancer-controller) | :white_check_mark:       |
+| [App Mesh Controller](./scripts/appmesh-controller)                    | :white_check_mark:       |
+| [Karpenter](./scripts/karpenter)                                       | :white_check_mark:       |
+| [Cluster AutoScaler](./scripts/cluster-autoscaler)                     | :heavy_minus_sign:       |
+| [Metrics Server](./scripts/metrics-server)                             | :heavy_minus_sign:       |
+| [kube-state-metrics](./scripts/kube-state-metrics)                     | :heavy_minus_sign:       |
+| [Cert Manager](./scripts/cert-manager)                                 | :heavy_minus_sign:       |
+| [Prometheus](./scripts/prometheus)                                     | :heavy_minus_sign:       |
+| [Prometheus Alertmanager](./scripts/alertmanager)                      | :heavy_minus_sign:       |
+| [Prometheus Node Exporter](./scripts/prometheus-node-exporter)         | :heavy_minus_sign:       |
+| [Prometheus Pushgateway](./scripts/prometheus-pushgateway)             | :heavy_minus_sign:       |
+| [Ingress Nginx Controller](./scripts/ingress-nginx-controller)         | :heavy_minus_sign:       |
 
 ## License
 
