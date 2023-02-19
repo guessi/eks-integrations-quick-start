@@ -13,6 +13,16 @@ fi
 echo "[debug] helm repo update"
 helm repo update prometheus-community
 
+echo "[debug] detecting namespace existance"
+kubectl get namespace | grep -q 'prometheus'
+
+if [ $? -ne 0 ]; then
+  echo "[debug] creating namespace"
+  kubectl create namespace prometheus
+else
+  echo "[debug] found namespace"
+fi
+
 echo "[debug] detecting Helm resource existance"
 helm list --all-namespaces | grep -q 'prometheus-pushgateway'
 

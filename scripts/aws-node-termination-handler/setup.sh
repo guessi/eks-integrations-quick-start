@@ -29,13 +29,22 @@ fi
 echo "[debug] helm repo update"
 helm repo update eks
 
+echo "[debug] detecting namespace existance"
+kubectl get namespace | grep -q 'aws-node-termination-handler'
+
+if [ $? -ne 0 ]; then
+  echo "[debug] creating namespace"
+  kubectl create namespace aws-node-termination-handler
+else
+  echo "[debug] found namespace"
+fi
+
 echo "[debug] detecting Helm resource existance"
 helm list --all-namespaces | grep -q 'aws-node-termination-handler'
 
 # TODO: nice to have regional image setup
 echo "[debug] setup eks/aws-node-termination-handler"
 helm upgrade \
-  --create-namespace \
   --namespace aws-node-termination-handler \
   --install aws-node-termination-handler \
   --version ${CHART_VERSION} \

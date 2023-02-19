@@ -22,6 +22,16 @@ fi
 echo "[debug] helm repo update"
 helm repo update jetstack
 
+echo "[debug] detecting namespace existance"
+kubectl get namespace | grep -q 'cert-manager'
+
+if [ $? -ne 0 ]; then
+  echo "[debug] creating namespace"
+  kubectl create namespace cert-manager
+else
+  echo "[debug] found namespace"
+fi
+
 echo "[debug] detecting Helm resource existance"
 helm list --all-namespaces | grep -q 'cert-manager'
 
