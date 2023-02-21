@@ -2,12 +2,12 @@
 apiVersion: karpenter.sh/v1alpha5
 kind: Provisioner
 metadata:
-  name: default
+  name: imdsv1
 spec:
   consolidation:
     enabled: true
   providerRef:
-    name: default
+    name: imdsv1
   kubeletConfiguration:
     containerRuntime: containerd
   limits:

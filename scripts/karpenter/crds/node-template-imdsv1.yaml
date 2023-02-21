@@ -2,7 +2,7 @@
 apiVersion: karpenter.k8s.aws/v1alpha1
 kind: AWSNodeTemplate
 metadata:
-  name: default
+  name: imdsv1
 spec:
   amiFamily: AL2
   subnetSelector:
@@ -11,11 +11,6 @@ spec:
     karpenter.sh/discovery: eks-demo
   tags:
     karpenter: "true"
-  metadataOptions:
-    httpEndpoint: enabled
-    httpProtocolIPv6: disabled
-    httpPutResponseHopLimit: 2
-    httpTokens: required
   blockDeviceMappings:
     - deviceName: /dev/xvda
       ebs:
