@@ -11,12 +11,14 @@ ROLE_NAME="${EKS_CLUSTER_NAME}-karpenter"
 
 # CHART VERSION	             APP VERSION
 # ----------------------------------------
-# karpenter-v0.25.0        	0.25.0   # ref: https://github.com/aws/karpenter/releases/tag/v0.25.0 (recommend)
+# karpenter-v0.26.1        	0.26.1   # ref: https://github.com/aws/karpenter/releases/tag/v0.26.1 (recommend)
+# karpenter-v0.26.0        	0.26.0   # ref: https://github.com/aws/karpenter/releases/tag/v0.26.0
+# karpenter-v0.25.0        	0.25.0   # ref: https://github.com/aws/karpenter/releases/tag/v0.25.0
 # karpenter-v0.24.0        	0.24.0   # ref: https://github.com/aws/karpenter/releases/tag/v0.24.0
 # karpenter-v0.23.0        	0.23.0   # ref: https://github.com/aws/karpenter/releases/tag/v0.23.0
 
-APP_VERSION="0.25.0"
-CHART_VERSION="0.25.0"
+APP_VERSION="0.26.1"
+CHART_VERSION="0.26.1"
 
 echo "[debug] detecting AWS Account ID"
 export AWS_ACCOUNT_ID=$(aws sts get-caller-identity --query Account --output text)
