@@ -7,14 +7,15 @@ SERVICE_ACCOUNT_NAME="appmesh-controller"
 
 # CHART VERSION APP VERSION
 # ---------------------------
+# 1.11.0        1.11.0
 # 1.10.0        1.10.0
 # 1.9.0         1.9.0
 
-APP_VERSION="1.10.0"
-CHART_VERSION="1.10.0"
-CONTROLLER_IMAGE_TAG="v1.10.0"
-SIDECAR_IMAGE_TAG="v1.24.0.0-prod"
-INIT_IMAGE_TAG="v6-prod"
+APP_VERSION="1.11.0"
+CHART_VERSION="1.11.0"
+CONTROLLER_IMAGE_TAG="v1.11.0"
+SIDECAR_IMAGE_TAG="v1.25.1.0-prod"
+INIT_IMAGE_TAG="v7-prod"
 
 echo "[debug] detecting AWS Account ID"
 export AWS_ACCOUNT_ID=$(aws sts get-caller-identity --query Account --output text)
