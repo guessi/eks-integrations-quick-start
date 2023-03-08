@@ -22,25 +22,13 @@ fi
 echo "[debug] helm repo update"
 helm repo update aws-ebs-csi-driver
 
-echo "[debug] detecting IAM policy existance"
-aws iam list-policies --query "Policies[].[PolicyName,UpdateDate]" --output text | grep "${POLICY_NAME}"
-
-if [ $? -ne 0 ]; then
-  echo "[debug] IAM policy existance not found, creating"
-  aws iam create-policy \
-    --policy-name ${POLICY_NAME} \
-    --policy-document file://policy.json
-else
-  echo "[debug] IAM policy existed"
-fi
-
 echo "[debug] creating IAM Roles for Service Accounts"
 eksctl create iamserviceaccount \
   --namespace kube-system \
   --region ${AWS_REGION} \
   --cluster ${EKS_CLUSTER_NAME} \
   --name ${SERVICE_ACCOUNT_NAME} \
-  --attach-policy-arn arn:aws:iam::${AWS_ACCOUNT_ID}:policy/${POLICY_NAME} \
+  --attach-policy-arn arn:aws:iam::aws:policy/service-role/AmazonEBSCSIDriverPolicy \
   --approve \
   --override-existing-serviceaccounts
 
