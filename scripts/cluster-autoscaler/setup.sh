@@ -4,11 +4,14 @@ AWS_REGION="us-east-1"
 EKS_CLUSTER_NAME="eks-demo"
 POLICY_NAME="AmazonEKSClusterAutoscalerPolicy"
 SERVICE_ACCOUNT_NAME="cluster-autoscaler"
-CLUSTER_AUTOSCALER_IMAGE_TAG="v1.25.0"
+CLUSTER_AUTOSCALER_IMAGE_TAG="v1.25.1"
 
 # Supported Versions:
+# - https://github.com/kubernetes/autoscaler/releases/tag/cluster-autoscaler-1.26.2
 # - https://github.com/kubernetes/autoscaler/releases/tag/cluster-autoscaler-1.26.1
+# - https://github.com/kubernetes/autoscaler/releases/tag/cluster-autoscaler-1.25.1
 # - https://github.com/kubernetes/autoscaler/releases/tag/cluster-autoscaler-1.25.0
+# - https://github.com/kubernetes/autoscaler/releases/tag/cluster-autoscaler-1.24.1
 # - https://github.com/kubernetes/autoscaler/releases/tag/cluster-autoscaler-1.24.0
 # - https://github.com/kubernetes/autoscaler/releases/tag/cluster-autoscaler-1.23.1
 # - https://github.com/kubernetes/autoscaler/releases/tag/cluster-autoscaler-1.22.3
