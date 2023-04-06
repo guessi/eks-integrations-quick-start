@@ -39,7 +39,12 @@ else
 fi
 
 echo "[debug] setup IAM resources"
-curl -fsSL "https://karpenter.sh/v${APP_VERSION}/getting-started/getting-started-with-eksctl/cloudformation.yaml" -O
+curl -fsSL "https://karpenter.sh/v${APP_VERSION}/getting-started/getting-started-with-karpenter/cloudformation.yaml" -O
+
+if [ ! -f "cloudformation.yaml" ]; then
+  echo "Failed to download cloudformation.yaml"
+  exit 1
+fi
 
 aws cloudformation deploy \
   --stack-name "Karpenter-${EKS_CLUSTER_NAME}" \
