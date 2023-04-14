@@ -4,11 +4,6 @@
 # ---------------------------
 # CHART VERSION	APP VERSION
 # 0.21.0       	1.19.0      # ref: https://github.com/aws/aws-node-termination-handler/releases/tag/v1.19.0
-# 0.20.3       	1.18.3      # ref: https://github.com/aws/aws-node-termination-handler/releases/tag/v1.18.3
-# 0.20.2       	1.18.2      # ref: https://github.com/aws/aws-node-termination-handler/releases/tag/v1.18.2
-# 0.20.1       	1.18.1      # ref: https://github.com/aws/aws-node-termination-handler/releases/tag/v1.18.1
-# 0.20.0       	1.18.0      # ref: https://github.com/aws/aws-node-termination-handler/releases/tag/v1.18.0
-# 0.19.3       	1.17.3      # ref: https://github.com/aws/aws-node-termination-handler/releases/tag/v1.17.3
 
 # APP_VERSION="1.19.0"
 CHART_VERSION="0.21.0"

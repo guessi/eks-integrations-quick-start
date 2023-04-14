@@ -3,9 +3,6 @@
 # CHART VERSION	APP VERSION
 # ---------------------------
 # v1.11.0      	v1.11.0
-# v1.10.1      	v1.10.1
-# v1.10.0      	v1.10.0
-# v1.9.1       	v1.9.1
 
 APP_VERSION="1.11.0"
 CHART_VERSION="v1.11.0"
