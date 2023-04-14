@@ -9,7 +9,6 @@
 ## Assumptions
 
 - Your AWS Profile have proper permission configured.
-- The cluster name would be `eks-demo` and it's running under `us-east-1`
 
 ## Supported integrations
 

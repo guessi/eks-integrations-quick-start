@@ -1,9 +1,11 @@
 #!/usr/bin/env bash
 
-AWS_REGION="us-east-1"
-EKS_CLUSTER_NAME="eks-demo"
-POLICY_NAME="AWSAppMeshK8sControllerIAMPolicy"
-SERVICE_ACCOUNT_NAME="appmesh-controller"
+source $(pwd)/../config.sh
+
+AWS_REGION="${EKS_CLUSTER_REGION}"
+EKS_CLUSTER_NAME="${EKS_CLUSTER_NAME}"
+IAM_POLICY_NAME="${IAM_POLICY_NAME_AppMeshController}"
+SERVICE_ACCOUNT_NAME="${SERVICE_ACCOUNT_NAME_AppMeshController}"
 
 # CHART VERSION APP VERSION
 # ---------------------------
@@ -35,12 +37,12 @@ echo "[debug] helm repo update"
 helm repo update eks
 
 echo "[debug] detecting IAM policy existance"
-aws iam list-policies --query "Policies[].[PolicyName,UpdateDate]" --output text | grep "${POLICY_NAME}"
+aws iam list-policies --query "Policies[].[PolicyName,UpdateDate]" --output text | grep "${IAM_POLICY_NAME}"
 
 if [ $? -ne 0 ]; then
   echo "[debug] IAM policy existance not found, creating"
   aws iam create-policy \
-    --policy-name ${POLICY_NAME} \
+    --policy-name ${IAM_POLICY_NAME} \
     --policy-document file://policy.json
 else
   echo "[debug] IAM policy existed"
@@ -62,12 +64,12 @@ eksctl create iamserviceaccount \
   --region ${AWS_REGION} \
   --cluster ${EKS_CLUSTER_NAME} \
   --name ${SERVICE_ACCOUNT_NAME} \
-  --attach-policy-arn arn:aws:iam::${AWS_ACCOUNT_ID}:policy/${POLICY_NAME} \
+  --attach-policy-arn arn:aws:iam::${AWS_ACCOUNT_ID}:policy/${IAM_POLICY_NAME} \
   --approve \
   --override-existing-serviceaccounts
 
 echo "[debug] creating Custom Resource Definition (CRDs)"
-kubectl apply -k "github.com/aws/eks-charts/stable/appmesh-controller//crds?ref=master"
+kubectl apply -k "github.com/aws/eks-charts//stable/appmesh-controller/crds?ref=master"
 
 echo "[debug] detecting Helm resource existance"
 helm list --all-namespaces | grep -q 'appmesh-controller'
@@ -89,9 +91,8 @@ helm upgrade \
     --set init.image.tag=${INIT_IMAGE_TAG} \
     --set region=${AWS_REGION}
 
-# the attributes above are copied from https://github.com/aws/eks-charts/blob/v0.0.108/stable/appmesh-controller/values.yaml (v0.0.108 is mapped to CHART_VERSION v1.7.0)
-# whenever you changed the CHART_VERSION or APP_VERSION, you should double confirm whether the version is you would like to install.
-# and don't foget the chagne the account number "602401143452" above if you are not running with "us-east-1".
+# the attributes above are copied from https://github.com/aws/eks-charts/blob/v0.0.127/stable/appmesh-controller/values.yaml (v0.0.127 is mapped to CHART_VERSION v1.11.0)
+# whenever you changed the CHART_VERSION or APP_VERSION, and don't foget the chagne the ACCOUNT_ID and REGION before run.
 # ref: https://docs.aws.amazon.com/app-mesh/latest/userguide/getting-started-kubernetes.html#install-controller
 
 echo "[debug] listing installed"

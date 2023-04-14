@@ -1,8 +1,5 @@
 #!/usr/bin/env bash
 
-AWS_REGION="us-east-1"
-EKS_CLUSTER_NAME="eks-demo"
-
 # CHART VERSION	APP VERSION
 # ---------------------------
 # CHART VERSION	APP VERSION

@@ -1,10 +1,12 @@
 #!/usr/bin/env bash
 
-AWS_REGION="us-east-1"
-EKS_CLUSTER_NAME="eks-demo"
-POLICY_NAME="KarpenterControllerPolicy-${EKS_CLUSTER_NAME}"
-SERVICE_ACCOUNT_NAME="karpenter"
-ROLE_NAME="${EKS_CLUSTER_NAME}-karpenter"
+source $(pwd)/../config.sh
+
+AWS_REGION="${EKS_CLUSTER_REGION}"
+EKS_CLUSTER_NAME="${EKS_CLUSTER_NAME}"
+IAM_POLICY_NAME="${IAM_POLICY_NAME_Karpenter}"
+IAM_ROLE_NAME="${IAM_ROLE_NAME_Karpenter}"
+SERVICE_ACCOUNT_NAME="${SERVICE_ACCOUNT_NAME_Karpenter}"
 
 # Before upgrade, you should always check latest upgrade guide:
 # - https://karpenter.sh/preview/upgrade-guide/
@@ -70,8 +72,8 @@ eksctl create iamserviceaccount \
   --region ${AWS_REGION} \
   --cluster ${EKS_CLUSTER_NAME} \
   --name ${SERVICE_ACCOUNT_NAME} \
-  --role-name "${ROLE_NAME}" \
-  --attach-policy-arn arn:aws:iam::${AWS_ACCOUNT_ID}:policy/${POLICY_NAME} \
+  --role-name "${IAM_ROLE_NAME}" \
+  --attach-policy-arn arn:aws:iam::${AWS_ACCOUNT_ID}:policy/${IAM_POLICY_NAME} \
   --approve \
   --override-existing-serviceaccounts
 
@@ -92,7 +94,7 @@ helm upgrade \
   oci://public.ecr.aws/karpenter/karpenter \
     --set serviceAccount.create=false \
     --set serviceAccount.name=${SERVICE_ACCOUNT_NAME} \
-    --set serviceAccount.annotations."eks\.amazonaws\.com/role-arn"="arn:aws:iam::${AWS_ACCOUNT_ID}:role/${ROLE_NAME}" \
+    --set serviceAccount.annotations."eks\.amazonaws\.com/role-arn"="arn:aws:iam::${AWS_ACCOUNT_ID}:role/${IAM_ROLE_NAME}" \
     --set settings.aws.clusterName=${EKS_CLUSTER_NAME} \
     --set settings.aws.clusterEndpoint=${CLUSTER_ENDPOINT} \
     --set settings.aws.defaultInstanceProfile=KarpenterNodeInstanceProfile-${EKS_CLUSTER_NAME} \

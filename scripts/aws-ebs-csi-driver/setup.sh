@@ -1,9 +1,10 @@
 #!/usr/bin/env bash
 
-AWS_REGION="us-east-1"
-EKS_CLUSTER_NAME="eks-demo"
-POLICY_NAME="AmazonEKS_EBS_CSI_Driver_Policy"
-SERVICE_ACCOUNT_NAME="ebs-csi-controller"
+source $(pwd)/../config.sh
+
+AWS_REGION="${EKS_CLUSTER_REGION}"
+EKS_CLUSTER_NAME="${EKS_CLUSTER_NAME}"
+SERVICE_ACCOUNT_NAME="${SERVICE_ACCOUNT_NAME_AmazonEbsCsiDriver}"
 
 echo "[debug] detecting AWS Account ID"
 export AWS_ACCOUNT_ID=$(aws sts get-caller-identity --query Account --output text)

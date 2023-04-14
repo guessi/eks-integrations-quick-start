@@ -1,7 +1,9 @@
 #!/usr/bin/env bash
 
-AWS_REGION="us-east-1"
-EKS_CLUSTER_NAME="eks-demo"
+source $(pwd)/../config.sh
+
+AWS_REGION="${EKS_CLUSTER_REGION}"
+EKS_CLUSTER_NAME="${EKS_CLUSTER_NAME}"
 
 VPC_ID=$(aws eks describe-cluster --name "${EKS_CLUSTER_NAME}" --region "${AWS_REGION}" --query 'cluster.resourcesVpcConfig.vpcId' --output text --no-cli-pager)
 echo "[debug] ${VPC_ID}"
