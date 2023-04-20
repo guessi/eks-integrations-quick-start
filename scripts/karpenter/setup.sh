@@ -13,11 +13,12 @@ SERVICE_ACCOUNT_NAME="${SERVICE_ACCOUNT_NAME_Karpenter}"
 
 # CHART VERSION	             APP VERSION
 # ----------------------------------------
-# karpenter-v0.27.2        	0.27.2   # ref: https://github.com/aws/karpenter/releases/tag/v0.27.2 (recommend)
+# karpenter-v0.27.3        	0.27.3   # ref: https://github.com/aws/karpenter/releases/tag/v0.27.3 (recommend)
+# karpenter-v0.27.2        	0.27.2   # ref: https://github.com/aws/karpenter/releases/tag/v0.27.2
 # karpenter-v0.26.1        	0.26.1   # ref: https://github.com/aws/karpenter/releases/tag/v0.26.1
 
-APP_VERSION="0.27.2"
-CHART_VERSION="0.27.2"
+APP_VERSION="0.27.3"
+CHART_VERSION="0.27.3"
 
 echo "[debug] detecting AWS Account ID"
 export AWS_ACCOUNT_ID=$(aws sts get-caller-identity --query Account --output text)
