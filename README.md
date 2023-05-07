@@ -19,6 +19,7 @@
 | [Amazon FSX CSI Driver](./scripts/aws-fsx-csi-driver)                  | :white_check_mark:       |
 | [AWS Load Balancer Controller](./scripts/aws-load-balancer-controller) | :white_check_mark:       |
 | [App Mesh Controller](./scripts/appmesh-controller)                    | :white_check_mark:       |
+| [AWS Gateway API Controller](./scripts/aws-gateway-api-controller)     | :white_check_mark:       |
 | [Karpenter](./scripts/karpenter)                                       | :white_check_mark:       |
 | [Cluster AutoScaler](./scripts/cluster-autoscaler)                     | :heavy_minus_sign:       |
 | [Metrics Server](./scripts/metrics-server)                             | :heavy_minus_sign:       |
