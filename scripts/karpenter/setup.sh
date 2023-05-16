@@ -79,6 +79,10 @@ kubectl apply -f https://raw.githubusercontent.com/aws/karpenter/v${CHART_VERSIO
 echo "[debug] detecting Helm resource existance"
 helm list --all-namespaces | grep -q 'karpenter'
 
+# https://github.com/aws/karpenter/pull/3880
+echo "[debug] ensure helm registry is logout"
+helm registry logout public.ecr.aws
+
 echo "[debug] setup karpenter/karpenter"
 
 helm upgrade \
