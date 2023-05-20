@@ -11,14 +11,16 @@ SERVICE_ACCOUNT_NAME="${SERVICE_ACCOUNT_NAME_Karpenter}"
 # Before upgrade, you should always check latest upgrade guide:
 # - https://karpenter.sh/preview/upgrade-guide/
 
-# CHART VERSION	             APP VERSION
+# CHART VERSION	            APP VERSION
 # ----------------------------------------
-# karpenter-v0.27.3        	0.27.3   # ref: https://github.com/aws/karpenter/releases/tag/v0.27.3 (recommend)
+# karpenter-v0.27.5        	0.27.5   # ref: https://github.com/aws/karpenter/releases/tag/v0.27.5 (recommend)
+# karpenter-v0.27.4        	0.27.4   # ref: https://github.com/aws/karpenter/releases/tag/v0.27.4 (skip it)
+# karpenter-v0.27.3        	0.27.3   # ref: https://github.com/aws/karpenter/releases/tag/v0.27.3
 # karpenter-v0.27.2        	0.27.2   # ref: https://github.com/aws/karpenter/releases/tag/v0.27.2
 # karpenter-v0.26.1        	0.26.1   # ref: https://github.com/aws/karpenter/releases/tag/v0.26.1
 
-APP_VERSION="0.27.3"
-CHART_VERSION="0.27.3"
+APP_VERSION="0.27.5"
+CHART_VERSION="0.27.5"
 
 echo "[debug] detecting AWS Account ID"
 export AWS_ACCOUNT_ID=$(aws sts get-caller-identity --query Account --output text)
