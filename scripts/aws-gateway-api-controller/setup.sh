@@ -51,6 +51,9 @@ aws ecr-public get-login-password --region us-east-1 | helm registry login --use
 echo "[debug] detecting Helm resource existance"
 helm list --all-namespaces | grep -q 'aws-application-networking-system'
 
+echo "[debug] ensure helm registry is logout"
+helm registry logout public.ecr.aws
+
 echo "[debug] setup gateway-api-controller/aws-application-networking-system"
 helm upgrade \
   --namespace aws-application-networking-system \
