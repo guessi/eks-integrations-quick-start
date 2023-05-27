@@ -36,7 +36,6 @@ eksctl create iamserviceaccount \
 echo "[debug] detecting Helm resource existance"
 helm list --all-namespaces | grep -q 'aws-ebs-csi-driver/aws-ebs-csi-driver'
 
-# TODO: nice to have regional image setup
 echo "[debug] setup aws-ebs-csi-driver/aws-ebs-csi-driver"
 helm upgrade \
   --namespace kube-system \
