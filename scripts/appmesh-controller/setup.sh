@@ -9,12 +9,13 @@ SERVICE_ACCOUNT_NAME="${SERVICE_ACCOUNT_NAME_AppMeshController}"
 
 # CHART VERSION APP VERSION
 # ---------------------------
+# 1.12.1        1.12.1
 # 1.11.0        1.11.0
 
-APP_VERSION="1.11.0"
-CHART_VERSION="1.11.0"
-CONTROLLER_IMAGE_TAG="v1.11.0"
-SIDECAR_IMAGE_TAG="v1.25.1.0-prod"
+APP_VERSION="1.12.1"
+CHART_VERSION="1.12.1"
+CONTROLLER_IMAGE_TAG="v1.12.1"
+SIDECAR_IMAGE_TAG="v1.25.4.0-prod"
 INIT_IMAGE_TAG="v7-prod"
 
 echo "[debug] detecting AWS Account ID"
