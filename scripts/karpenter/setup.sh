@@ -108,3 +108,6 @@ helm upgrade \
 
 echo "[debug] listing installed"
 helm list --all-namespaces --filter karpenter
+
+echo "[debug] post-install reminders"
+echo "Before applying CRDs, you should check for karpenter discovery tags definitions."
