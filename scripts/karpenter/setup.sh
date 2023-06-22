@@ -13,7 +13,8 @@ SERVICE_ACCOUNT_NAME="${SERVICE_ACCOUNT_NAME_Karpenter}"
 
 # CHART VERSION	            APP VERSION
 # ----------------------------------------
-# karpenter-v0.28.0        	0.28.0   # ref: https://github.com/aws/karpenter/releases/tag/v0.28.0 (recommend)
+# karpenter-v0.28.1        	0.28.1   # ref: https://github.com/aws/karpenter/releases/tag/v0.28.1 (recommend)
+# karpenter-v0.28.0        	0.28.0   # ref: https://github.com/aws/karpenter/releases/tag/v0.28.0
 # karpenter-v0.27.6        	0.27.6   # ref: https://github.com/aws/karpenter/releases/tag/v0.27.6
 # karpenter-v0.27.5        	0.27.5   # ref: https://github.com/aws/karpenter/releases/tag/v0.27.5
 # karpenter-v0.27.4        	0.27.4   # ref: https://github.com/aws/karpenter/releases/tag/v0.27.4 (skip it)
@@ -21,8 +22,8 @@ SERVICE_ACCOUNT_NAME="${SERVICE_ACCOUNT_NAME_Karpenter}"
 # karpenter-v0.27.2        	0.27.2   # ref: https://github.com/aws/karpenter/releases/tag/v0.27.2
 # karpenter-v0.26.1        	0.26.1   # ref: https://github.com/aws/karpenter/releases/tag/v0.26.1
 
-APP_VERSION="0.27.6"
-CHART_VERSION="0.27.6" # FIXME: script is not ready for v0.28.0 yet.
+APP_VERSION="0.28.1"
+CHART_VERSION="0.28.1"
 
 echo "[debug] detecting AWS Account ID"
 export AWS_ACCOUNT_ID=$(aws sts get-caller-identity --query Account --output text)
@@ -41,7 +42,7 @@ else
 fi
 
 echo "[debug] setup IAM resources"
-curl -fsSL "https://karpenter.sh/v${APP_VERSION}/getting-started/getting-started-with-karpenter/cloudformation.yaml" -O
+curl -fsSL "https://raw.githubusercontent.com/aws/karpenter/v${APP_VERSION}/website/content/en/preview/getting-started/getting-started-with-karpenter/cloudformation.yaml" -O
 
 if [ ! -f "cloudformation.yaml" ]; then
   echo "Failed to download cloudformation.yaml"
@@ -78,6 +79,7 @@ eksctl create iamserviceaccount \
 
 echo "[debug] creating Custom Resource Definition (CRDs)"
 kubectl apply -f https://raw.githubusercontent.com/aws/karpenter/v${CHART_VERSION}/pkg/apis/crds/karpenter.sh_provisioners.yaml
+kubectl apply -f https://raw.githubusercontent.com/aws/karpenter/v${CHART_VERSION}/pkg/apis/crds/karpenter.sh_machines.yaml
 kubectl apply -f https://raw.githubusercontent.com/aws/karpenter/v${CHART_VERSION}/pkg/apis/crds/karpenter.k8s.aws_awsnodetemplates.yaml
 
 echo "[debug] detecting Helm resource existance"
