@@ -4,8 +4,6 @@ EKS_CLUSTER_NAME="eks-demo"
 
 # IAM Policy Names
 IAM_POLICY_NAME_AWSLoadBalancerController="AWS_Load_Balancer_Controller_Policy"
-IAM_POLICY_NAME_AmazonEbsCsiDriver="EBS_CSI_Driver_Policy" # it is actually unused
-IAM_POLICY_NAME_AmazonEfsCsiDriver="EFS_CSI_Driver_Policy"
 IAM_POLICY_NAME_AmazonFsxCsiDriver="FSx_CSI_Driver_Policy"
 IAM_POLICY_NAME_AppMeshController="AppMesh_Controller_Policy"
 IAM_POLICY_NAME_ClusterAutoScaler="Cluster_Autoscaler_Policy"
