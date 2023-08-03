@@ -4,7 +4,6 @@ source $(pwd)/../config.sh
 
 AWS_REGION="${EKS_CLUSTER_REGION}"
 EKS_CLUSTER_NAME="${EKS_CLUSTER_NAME}"
-IAM_POLICY_NAME="${IAM_POLICY_NAME_AmazonEfsCsiDriver}"
 SERVICE_ACCOUNT_NAME="${SERVICE_ACCOUNT_NAME_AmazonEfsCsiDriver}"
 
 echo "[debug] detecting AWS Account ID"
@@ -24,25 +23,13 @@ fi
 echo "[debug] helm repo update"
 helm repo update aws-efs-csi-driver
 
-echo "[debug] detecting IAM policy existance"
-aws iam list-policies --query "Policies[].[PolicyName,UpdateDate]" --output text | grep "${IAM_POLICY_NAME}"
-
-if [ $? -ne 0 ]; then
-  echo "[debug] IAM policy existance not found, creating"
-  aws iam create-policy \
-    --policy-name ${IAM_POLICY_NAME} \
-    --policy-document file://policy.json
-else
-  echo "[debug] IAM policy existed"
-fi
-
 echo "[debug] creating IAM Roles for Service Accounts"
 eksctl create iamserviceaccount \
   --namespace kube-system \
   --region ${AWS_REGION} \
   --cluster ${EKS_CLUSTER_NAME} \
   --name ${SERVICE_ACCOUNT_NAME} \
-  --attach-policy-arn arn:aws:iam::${AWS_ACCOUNT_ID}:policy/${IAM_POLICY_NAME} \
+  --attach-policy-arn arn:aws:iam::aws:policy/service-role/AmazonEFSCSIDriverPolicy \
   --region ${AWS_REGION} \
   --approve \
   --override-existing-serviceaccounts
