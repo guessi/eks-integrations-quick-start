@@ -10,6 +10,7 @@ SERVICE_ACCOUNT_NAME="${SERVICE_ACCOUNT_NAME_ClusterAutoScaler}"
 CLUSTER_AUTOSCALER_IMAGE_TAG="v1.27.3"
 
 # Supported Versions:
+# - https://github.com/kubernetes/autoscaler/releases/tag/cluster-autoscaler-1.28.0
 # - https://github.com/kubernetes/autoscaler/releases/tag/cluster-autoscaler-1.27.3
 # - https://github.com/kubernetes/autoscaler/releases/tag/cluster-autoscaler-1.26.4
 # - https://github.com/kubernetes/autoscaler/releases/tag/cluster-autoscaler-1.25.3
