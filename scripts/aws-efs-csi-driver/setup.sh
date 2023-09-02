@@ -45,6 +45,7 @@ helm upgrade \
   aws-efs-csi-driver/aws-efs-csi-driver \
     --set controller.serviceAccount.create=false \
     --set controller.serviceAccount.name=${SERVICE_ACCOUNT_NAME} \
+    --set sidecars.nodeDriverRegistrar.securityContext.readOnlyRootFilesystem=false \
     --set image.repository=602401143452.dkr.ecr.${AWS_REGION}.amazonaws.com/eks/aws-efs-csi-driver
 
 echo "[debug] listing installed"
