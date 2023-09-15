@@ -9,9 +9,10 @@ SERVICE_ACCOUNT_NAME="${SERVICE_ACCOUNT_NAME_AwsLoadBalancerController}"
 
 # CHART VERSION	APP VERSION
 # ---------------------------
-# 1.6.0        	v2.6.0 (recommend)
+# 1.6.1        	v2.6.1 (recommend)
+# 1.6.0        	v2.6.0
 # 1.5.5        	v2.5.4
-# 1.5.4        	v2.5.3 
+# 1.5.4        	v2.5.3
 # 1.5.3        	v2.5.2
 # 1.5.2        	v2.5.1
 # 1.5.1        	v2.5.1
@@ -35,10 +36,10 @@ SERVICE_ACCOUNT_NAME="${SERVICE_ACCOUNT_NAME_AwsLoadBalancerController}"
 # * AWS Load Balancer Controller v2.4.0+ requires Kubernetes 1.19+
 # * AWS Load Balancer Controller v2.5.0+ requires Kubernetes 1.22+
 #
-# ref: https://kubernetes-sigs.github.io/aws-load-balancer-controller/v2.5/deploy/installation/#kubernetes-version-requirements
+# ref: https://kubernetes-sigs.github.io/aws-load-balancer-controller/v2.6/deploy/installation/#supported-kubernetes-versions
 
-APP_VERSION="v2.6.0"
-CHART_VERSION="1.6.0"
+APP_VERSION="v2.6.1"
+CHART_VERSION="1.6.1"
 
 echo "[debug] detecting AWS Account ID"
 export AWS_ACCOUNT_ID=$(aws sts get-caller-identity --query Account --output text)
