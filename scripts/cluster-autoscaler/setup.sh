@@ -9,6 +9,10 @@ SERVICE_ACCOUNT_NAME="${SERVICE_ACCOUNT_NAME_ClusterAutoScaler}"
 
 CLUSTER_AUTOSCALER_IMAGE_TAG="v1.27.3"
 
+# HINT: if there have multiple cluster-autoscaler running under the same cluster, you might need to customize these variables.
+NAMESPACE="kube-system"
+FULLNAME_OVERRIDE="cluster-autoscaler"
+
 # Supported Versions:
 # - https://github.com/kubernetes/autoscaler/releases/tag/cluster-autoscaler-1.28.0
 # - https://github.com/kubernetes/autoscaler/releases/tag/cluster-autoscaler-1.27.3
@@ -49,7 +53,7 @@ fi
 
 echo "[debug] creating IAM Roles for Service Accounts"
 eksctl create iamserviceaccount \
-  --namespace kube-system \
+  --namespace ${NAMESPACE} \
   --region ${AWS_REGION} \
   --cluster ${EKS_CLUSTER_NAME} \
   --name ${SERVICE_ACCOUNT_NAME} \
@@ -62,14 +66,15 @@ helm list --all-namespaces | grep -q 'cluster-autoscaler'
 
 echo "[debug] setup autoscaler/cluster-autoscaler"
 helm upgrade \
-  --namespace kube-system \
+  --namespace ${NAMESPACE} \
   --install cluster-autoscaler \
   autoscaler/cluster-autoscaler \
     --set awsRegion=${AWS_REGION} \
+    --set clusterAPIConfigMapsNamespace=${NAMESPACE} \
     --set rbac.serviceAccount.create=false \
     --set rbac.serviceAccount.name=${SERVICE_ACCOUNT_NAME} \
     --set autoDiscovery.clusterName=${EKS_CLUSTER_NAME} \
-    --set fullnameOverride="cluster-autoscaler" \
+    --set fullnameOverride="${FULLNAME_OVERRIDE}" \
     --set image.tag="${CLUSTER_AUTOSCALER_IMAGE_TAG}"
 
 echo "[debug] listing installed"
