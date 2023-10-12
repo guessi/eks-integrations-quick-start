@@ -7,7 +7,7 @@ EKS_CLUSTER_NAME="${EKS_CLUSTER_NAME}"
 IAM_POLICY_NAME="${IAM_POLICY_NAME_ClusterAutoScaler}"
 SERVICE_ACCOUNT_NAME="${SERVICE_ACCOUNT_NAME_ClusterAutoScaler}"
 
-CLUSTER_AUTOSCALER_IMAGE_TAG="v1.27.3"
+CLUSTER_AUTOSCALER_IMAGE_TAG="v1.28.0"
 
 # HINT: if there have multiple cluster-autoscaler running under the same cluster, you might need to customize these variables.
 NAMESPACE="kube-system"
