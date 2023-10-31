@@ -3,10 +3,11 @@
 # CHART VERSION	APP VERSION
 # ---------------------------
 # CHART VERSION	APP VERSION
+# 0.22.0       	1.20.0      # ref: https://github.com/aws/aws-node-termination-handler/releases/tag/v1.20.0
 # 0.21.0       	1.19.0      # ref: https://github.com/aws/aws-node-termination-handler/releases/tag/v1.19.0
 
-# APP_VERSION="1.19.0"
-CHART_VERSION="0.21.0"
+# APP_VERSION="1.20.0"
+CHART_VERSION="0.22.0"
 
 echo "[debug] detecting chart repo existance"
 helm repo list | grep -q 'eks-charts'
