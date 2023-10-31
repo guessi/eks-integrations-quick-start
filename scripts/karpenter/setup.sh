@@ -13,16 +13,11 @@ SERVICE_ACCOUNT_NAME="${SERVICE_ACCOUNT_NAME_Karpenter}"
 
 # CHART VERSION	            APP VERSION
 # ----------------------------------------
-# karpenter-v0.31.1        	0.31.1   # ref: https://github.com/aws/karpenter/releases/tag/v0.31.1 (recommend)
-# karpenter-v0.31.0        	0.31.0   # ref: https://github.com/aws/karpenter/releases/tag/v0.31.0
-# karpenter-v0.30.0        	0.30.0   # ref: https://github.com/aws/karpenter/releases/tag/v0.30.0
-# karpenter-v0.29.2        	0.29.2   # ref: https://github.com/aws/karpenter/releases/tag/v0.29.2
-# karpenter-v0.29.1        	0.29.1   # ref: https://github.com/aws/karpenter/releases/tag/v0.29.1 # do not use
-# karpenter-v0.29.0        	0.29.0   # ref: https://github.com/aws/karpenter/releases/tag/v0.29.0
-# karpenter-v0.28.1        	0.28.1   # ref: https://github.com/aws/karpenter/releases/tag/v0.28.1
+# karpenter-v0.32.0        	0.32.0   # ref: https://github.com/aws/karpenter/releases/tag/v0.32.0 (recommend)
+# karpenter-v0.31.2        	0.31.2   # ref: https://github.com/aws/karpenter/releases/tag/v0.31.2
 
-APP_VERSION="0.31.1"
-CHART_VERSION="0.31.1"
+APP_VERSION="0.32.0"
+CHART_VERSION="0.32.0"
 
 echo "[debug] detecting AWS Account ID"
 export AWS_ACCOUNT_ID=$(aws sts get-caller-identity --query Account --output text)
@@ -77,9 +72,9 @@ eksctl create iamserviceaccount \
   --override-existing-serviceaccounts
 
 echo "[debug] creating Custom Resource Definition (CRDs)"
-kubectl apply -f https://raw.githubusercontent.com/aws/karpenter/v${CHART_VERSION}/pkg/apis/crds/karpenter.sh_provisioners.yaml
-kubectl apply -f https://raw.githubusercontent.com/aws/karpenter/v${CHART_VERSION}/pkg/apis/crds/karpenter.sh_machines.yaml
-kubectl apply -f https://raw.githubusercontent.com/aws/karpenter/v${CHART_VERSION}/pkg/apis/crds/karpenter.k8s.aws_awsnodetemplates.yaml
+kubectl apply -f https://raw.githubusercontent.com/aws/karpenter/v${CHART_VERSION}/pkg/apis/crds/karpenter.sh_nodepools.yaml
+kubectl apply -f https://raw.githubusercontent.com/aws/karpenter/v${CHART_VERSION}/pkg/apis/crds/karpenter.sh_nodeclaims.yaml
+kubectl apply -f https://raw.githubusercontent.com/aws/karpenter/v${CHART_VERSION}/pkg/apis/crds/karpenter.k8s.aws_ec2nodeclasses.yaml
 
 echo "[debug] detecting Helm resource existance"
 helm list --all-namespaces | grep -q 'karpenter'
