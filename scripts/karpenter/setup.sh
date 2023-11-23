@@ -74,6 +74,9 @@ eksctl create iamserviceaccount \
   --override-existing-serviceaccounts
 
 echo "[debug] creating Custom Resource Definition (CRDs)"
+kubectl apply -f https://raw.githubusercontent.com/aws/karpenter/v${CHART_VERSION}/pkg/apis/crds/karpenter.sh_provisioners.yaml          # Optional, required only when upgrading from version <= 0.31.x
+kubectl apply -f https://raw.githubusercontent.com/aws/karpenter/v${CHART_VERSION}/pkg/apis/crds/karpenter.sh_machines.yaml              # Optional, required only when upgrading from version <= 0.31.x
+kubectl apply -f https://raw.githubusercontent.com/aws/karpenter/v${CHART_VERSION}/pkg/apis/crds/karpenter.k8s.aws_awsnodetemplates.yaml # Optional, required only when upgrading from version <= 0.31.x
 kubectl apply -f https://raw.githubusercontent.com/aws/karpenter/v${CHART_VERSION}/pkg/apis/crds/karpenter.sh_nodepools.yaml
 kubectl apply -f https://raw.githubusercontent.com/aws/karpenter/v${CHART_VERSION}/pkg/apis/crds/karpenter.sh_nodeclaims.yaml
 kubectl apply -f https://raw.githubusercontent.com/aws/karpenter/v${CHART_VERSION}/pkg/apis/crds/karpenter.k8s.aws_ec2nodeclasses.yaml
