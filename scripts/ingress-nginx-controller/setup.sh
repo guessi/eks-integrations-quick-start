@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 echo "[debug] detecting chart repo existance"
-helm repo list | grep -q 'metrics-server'
+helm repo list | grep -q 'ingress-nginx'
 
 if [ $? -ne 0 ]; then
   echo "[debug] setup chart repo"
