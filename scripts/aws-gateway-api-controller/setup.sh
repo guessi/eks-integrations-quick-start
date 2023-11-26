@@ -7,8 +7,8 @@ EKS_CLUSTER_NAME="${EKS_CLUSTER_NAME}"
 IAM_POLICY_NAME="VPCLatticeControllerIAMPolicy"
 SERVICE_ACCOUNT_NAME="gateway-api-controller"
 
-APP_VERSION="0.0.11"
-CHART_VERSION="0.0.11"
+APP_VERSION="1.0.1"
+CHART_VERSION="1.0.1"
 
 echo "[debug] detecting AWS Account ID"
 export AWS_ACCOUNT_ID=$(aws sts get-caller-identity --query Account --output text)
@@ -63,16 +63,22 @@ helm upgrade \
   oci://public.ecr.aws/aws-application-networking-k8s/aws-gateway-controller-chart \
     --set serviceAccount.create=false \
     --set serviceAccount.name=${SERVICE_ACCOUNT_NAME} \
-    --set aws.region=${AWS_REGION} \
+    --set fullnameOverride="gateway-api-controller" \
+    --set awsregion=${AWS_REGION} \
+    --set clusterName=${EKS_CLUSTER_NAME} \
+    --set log.level=info \
     --wait
+   # When specified, the controller will automatically create a service network with the name.
+   # --set=defaultServiceNetwork=my-hotel
 
 echo "[debug] listing installed"
-helm list --all-namespaces --filter aws-application-networking-system
+helm list --all-namespaces --filter gateway-api-controller
 
 echo "[debug] setup GatewayClass"
 if ! kubectl get GatewayClass | grep -q 'amazon-vpc-lattice'; then
   echo "[debug] GatewayClass 'amazon-vpc-lattice' not found, creating"
   kubectl apply -f https://raw.githubusercontent.com/aws/aws-application-networking-k8s/v${APP_VERSION}/examples/gatewayclass.yaml
+  kubectl get GatewayClass
 else
   echo "[debug] GatewayClass 'amazon-vpc-lattice' existed"
 fi
