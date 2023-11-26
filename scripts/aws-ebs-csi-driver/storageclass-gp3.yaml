@@ -1,7 +1,41 @@
+---
 apiVersion: storage.k8s.io/v1
 kind: StorageClass
 metadata:
-  name: gp3
+  # annotations:
+  #   # ref: https://kubernetes.io/docs/tasks/administer-cluster/change-default-storage-class/#changing-the-default-storageclass
+  #   storageclass.kubernetes.io/is-default-class: "false"
+  name: gp3-delete
+provisioner: ebs.csi.aws.com
+volumeBindingMode: WaitForFirstConsumer
+reclaimPolicy: Delete
+# ref: https://github.com/kubernetes-sigs/aws-ebs-csi-driver/blob/master/docs/parameters.md
+parameters:
+  csi.storage.k8s.io/fstype: ext4
+  type: gp3
+# allowedTopologies:
+# - matchLabelExpressions:
+#   - key: topology.ebs.csi.aws.com/zone
+#     values:
+#     - us-east-1a
+
+---
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  # annotations:
+  #   # ref: https://kubernetes.io/docs/tasks/administer-cluster/change-default-storage-class/#changing-the-default-storageclass
+  #   storageclass.kubernetes.io/is-default-class: "false"
+  name: gp3-retain
 provisioner: ebs.csi.aws.com
 volumeBindingMode: WaitForFirstConsumer
 reclaimPolicy: Retain
+# ref: https://github.com/kubernetes-sigs/aws-ebs-csi-driver/blob/master/docs/parameters.md
+parameters:
+  csi.storage.k8s.io/fstype: ext4
+  type: gp3
+# allowedTopologies:
+# - matchLabelExpressions:
+#   - key: topology.ebs.csi.aws.com/zone
+#     values:
+#     - us-east-1a
