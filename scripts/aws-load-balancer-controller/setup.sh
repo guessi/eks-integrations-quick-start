@@ -12,24 +12,24 @@ SERVICE_ACCOUNT_NAME="${SERVICE_ACCOUNT_NAME_AwsLoadBalancerController}"
 # 1.6.2        	v2.6.2 (recommend)
 # 1.6.1        	v2.6.1
 # 1.6.0        	v2.6.0
-# 1.5.5        	v2.5.4
+# 1.5.5        	v2.5.4 (preferred version for 2.5.x)
 # 1.5.4        	v2.5.3
 # 1.5.3        	v2.5.2
 # 1.5.2        	v2.5.1
 # 1.5.1        	v2.5.1
 # 1.5.0        	v2.5.0
-# 1.4.8        	v2.4.7
-# 1.4.7        	v2.4.6
-# 1.4.6        	v2.4.5
-# 1.4.5        	v2.4.4
-# 1.4.4        	v2.4.3
-# 1.4.3        	v2.4.2
-# 1.4.2        	v2.4.2
-# 1.4.1        	v2.4.1
-# 1.4.0        	v2.4.0
-# 1.3.3        	v2.3.1
-# 1.3.2        	v2.3.0
-# 1.3.1        	v2.3.0
+# 1.4.8        	v2.4.7 (preferred version for 2.4.x)
+# 1.4.7        	v2.4.6 (please upgrade, not recommended anymore)
+# 1.4.6        	v2.4.5 (please upgrade, not recommended anymore)
+# 1.4.5        	v2.4.4 (please upgrade, not recommended anymore)
+# 1.4.4        	v2.4.3 (please upgrade, not recommended anymore)
+# 1.4.3        	v2.4.2 (please upgrade, not recommended anymore)
+# 1.4.2        	v2.4.2 (please upgrade, not recommended anymore)
+# 1.4.1        	v2.4.1 (please upgrade, not recommended anymore)
+# 1.4.0        	v2.4.0 (please upgrade, not recommended anymore)
+# 1.3.3        	v2.3.1 (please upgrade, not recommended anymore)
+# 1.3.2        	v2.3.0 (please upgrade, not recommended anymore)
+# 1.3.1        	v2.3.0 (please upgrade, not recommended anymore)
 
 # Kubernetes version requirements
 # * AWS Load Balancer Controller v2.0.0~v2.1.3 requires Kubernetes 1.15+
