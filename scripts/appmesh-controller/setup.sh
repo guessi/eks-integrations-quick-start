@@ -9,15 +9,16 @@ SERVICE_ACCOUNT_NAME="${SERVICE_ACCOUNT_NAME_AppMeshController}"
 
 # CHART VERSION APP VERSION
 # ---------------------------
+# 1.12.7        1.12.7
 # 1.12.5        1.12.5
 # 1.12.3        1.12.3
 # 1.12.2        1.12.2
 # 1.12.1        1.12.1
 # 1.11.0        1.11.0
 
-APP_VERSION="1.12.5"
-CHART_VERSION="1.12.5"
-CONTROLLER_IMAGE_TAG="v1.12.5"
+APP_VERSION="1.12.7"
+CHART_VERSION="1.12.7"
+CONTROLLER_IMAGE_TAG="v1.12.7"
 SIDECAR_IMAGE_TAG="v1.27.2.0-prod"
 INIT_IMAGE_TAG="v7-prod"
 
