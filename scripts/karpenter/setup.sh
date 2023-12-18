@@ -102,6 +102,7 @@ helm upgrade \
     --set serviceAccount.name=${SERVICE_ACCOUNT_NAME} \
     --set serviceAccount.annotations."eks\.amazonaws\.com/role-arn"="arn:aws:iam::${AWS_ACCOUNT_ID}:role/${IAM_ROLE_NAME}" \
     --set settings.aws.clusterName=${EKS_CLUSTER_NAME} \
+    --set settings.interruptionQueue=${EKS_CLUSTER_NAME} \
     --set settings.aws.clusterEndpoint=${CLUSTER_ENDPOINT} \
     --set settings.aws.defaultInstanceProfile=KarpenterNodeInstanceProfile-${EKS_CLUSTER_NAME} \
     --set settings.aws.interruptionQueueName=${EKS_CLUSTER_NAME} \
