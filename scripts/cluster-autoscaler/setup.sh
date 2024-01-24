@@ -7,16 +7,17 @@ EKS_CLUSTER_NAME="${EKS_CLUSTER_NAME}"
 IAM_POLICY_NAME="${IAM_POLICY_NAME_ClusterAutoScaler}"
 SERVICE_ACCOUNT_NAME="${SERVICE_ACCOUNT_NAME_ClusterAutoScaler}"
 
-CLUSTER_AUTOSCALER_IMAGE_TAG="v1.28.1"
+CLUSTER_AUTOSCALER_IMAGE_TAG="v1.29.0"
 
 # HINT: if there have multiple cluster-autoscaler running under the same cluster, you might need to customize these variables.
 NAMESPACE="kube-system"
 FULLNAME_OVERRIDE="cluster-autoscaler"
 
 # Supported Versions:
-# - https://github.com/kubernetes/autoscaler/releases/tag/cluster-autoscaler-1.28.1
-# - https://github.com/kubernetes/autoscaler/releases/tag/cluster-autoscaler-1.27.4
-# - https://github.com/kubernetes/autoscaler/releases/tag/cluster-autoscaler-1.26.5
+# - https://github.com/kubernetes/autoscaler/releases/tag/cluster-autoscaler-1.29.0
+# - https://github.com/kubernetes/autoscaler/releases/tag/cluster-autoscaler-1.28.2
+# - https://github.com/kubernetes/autoscaler/releases/tag/cluster-autoscaler-1.27.5
+# - https://github.com/kubernetes/autoscaler/releases/tag/cluster-autoscaler-1.26.6
 # - https://github.com/kubernetes/autoscaler/releases/tag/cluster-autoscaler-1.25.3
 # - https://github.com/kubernetes/autoscaler/releases/tag/cluster-autoscaler-1.24.3
 # - https://github.com/kubernetes/autoscaler/releases/tag/cluster-autoscaler-1.23.1
