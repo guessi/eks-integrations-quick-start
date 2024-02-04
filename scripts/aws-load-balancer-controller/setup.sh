@@ -9,7 +9,8 @@ SERVICE_ACCOUNT_NAME="${SERVICE_ACCOUNT_NAME_AwsLoadBalancerController}"
 
 # CHART VERSION	APP VERSION
 # ---------------------------
-# 1.6.2        	v2.6.2 (recommend)
+# 1.7.0        	v2.7.0 (recommend)
+# 1.6.2        	v2.6.2 (preferred version for 2.6.x)
 # 1.6.1        	v2.6.1
 # 1.6.0        	v2.6.0
 # 1.5.5        	v2.5.4 (preferred version for 2.5.x)
@@ -37,10 +38,10 @@ SERVICE_ACCOUNT_NAME="${SERVICE_ACCOUNT_NAME_AwsLoadBalancerController}"
 # * AWS Load Balancer Controller v2.4.0+ requires Kubernetes 1.19+
 # * AWS Load Balancer Controller v2.5.0+ requires Kubernetes 1.22+
 #
-# ref: https://kubernetes-sigs.github.io/aws-load-balancer-controller/v2.6/deploy/installation/#supported-kubernetes-versions
+# ref: https://kubernetes-sigs.github.io/aws-load-balancer-controller/v2.7/deploy/installation/#supported-kubernetes-versions
 
-APP_VERSION="v2.6.2"
-CHART_VERSION="1.6.2"
+APP_VERSION="v2.7.0"
+CHART_VERSION="1.7.0"
 
 echo "[debug] detecting AWS Account ID"
 export AWS_ACCOUNT_ID=$(aws sts get-caller-identity --query Account --output text)
@@ -91,7 +92,6 @@ kubectl apply -k "github.com/aws/eks-charts//stable/aws-load-balancer-controller
 echo "[debug] detecting Helm resource existance"
 helm list --all-namespaces | grep -q 'aws-load-balancer-controller'
 
-# TODO: nice to have regional image setup
 echo "[debug] setup eks/aws-load-balancer-controller"
 helm upgrade \
   --namespace kube-system \
