@@ -15,8 +15,8 @@ SERVICE_ACCOUNT_NAME="${SERVICE_ACCOUNT_NAME_Karpenter}"
 # ----------------------------------------
 # karpenter-v0.34.0        	0.34.0   # ref: https://github.com/aws/karpenter/releases/tag/v0.34.0 (recommend)
 # karpenter-v0.33.2        	0.33.2   # ref: https://github.com/aws/karpenter/releases/tag/v0.33.2
-# karpenter-v0.32.6        	0.32.6   # ref: https://github.com/aws/karpenter/releases/tag/v0.32.6
-# karpenter-v0.31.3        	0.31.3   # ref: https://github.com/aws/karpenter/releases/tag/v0.31.3
+# karpenter-v0.32.7        	0.32.7   # ref: https://github.com/aws/karpenter/releases/tag/v0.32.7
+# karpenter-v0.31.4        	0.31.4   # ref: https://github.com/aws/karpenter/releases/tag/v0.31.4
 
 APP_VERSION="0.34.0"
 CHART_VERSION="0.34.0"
