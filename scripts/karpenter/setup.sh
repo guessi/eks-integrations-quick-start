@@ -15,8 +15,6 @@ SERVICE_ACCOUNT_NAME="${SERVICE_ACCOUNT_NAME_Karpenter}"
 # ----------------------------------------
 # karpenter-v0.34.0        	0.34.0   # ref: https://github.com/aws/karpenter/releases/tag/v0.34.0 (recommend)
 # karpenter-v0.33.2        	0.33.2   # ref: https://github.com/aws/karpenter/releases/tag/v0.33.2
-# karpenter-v0.32.7        	0.32.7   # ref: https://github.com/aws/karpenter/releases/tag/v0.32.7
-# karpenter-v0.31.4        	0.31.4   # ref: https://github.com/aws/karpenter/releases/tag/v0.31.4
 
 APP_VERSION="0.34.0"
 CHART_VERSION="0.34.0"
@@ -72,12 +70,6 @@ eksctl create iamserviceaccount \
   --attach-policy-arn arn:aws:iam::${AWS_ACCOUNT_ID}:policy/${IAM_POLICY_NAME} \
   --approve \
   --override-existing-serviceaccounts
-
-# (Optional) required only when upgrading from version <= 0.31.x
-echo "[debug] creating Custom Resource Definition (CRDs) - for backward compatibility"
-kubectl apply -f https://raw.githubusercontent.com/aws/karpenter/v${CHART_VERSION}/pkg/apis/crds/karpenter.sh_provisioners.yaml
-kubectl apply -f https://raw.githubusercontent.com/aws/karpenter/v${CHART_VERSION}/pkg/apis/crds/karpenter.sh_machines.yaml
-kubectl apply -f https://raw.githubusercontent.com/aws/karpenter/v${CHART_VERSION}/pkg/apis/crds/karpenter.k8s.aws_awsnodetemplates.yaml
 
 echo "[debug] creating Custom Resource Definition (CRDs)"
 kubectl apply -f https://raw.githubusercontent.com/aws/karpenter/v${CHART_VERSION}/pkg/apis/crds/karpenter.sh_nodepools.yaml
