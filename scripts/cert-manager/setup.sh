@@ -2,10 +2,11 @@
 
 # CHART VERSION	APP VERSION
 # ---------------------------
+# v1.14.2      	v1.14.2
 # v1.13.3      	v1.13.3
 
-APP_VERSION="1.13.3"
-CHART_VERSION="v1.13.3"
+APP_VERSION="1.14.2"
+CHART_VERSION="v1.14.2"
 
 echo "[debug] detecting chart repo existance"
 helm repo list | grep -q 'cert-manager'
@@ -31,7 +32,7 @@ else
 fi
 
 # echo "[debug] creating Custom Resource Definition (CRDs)"
-# kubectl apply -f https://github.com/cert-manager/cert-manager/releases/download/v1.13.3/cert-manager.crds.yaml
+# kubectl apply -f https://github.com/cert-manager/cert-manager/releases/download/v1.14.2/cert-manager.crds.yaml
 
 echo "[debug] detecting Helm resource existance"
 helm list --all-namespaces | grep -q 'cert-manager'
