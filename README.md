@@ -16,7 +16,6 @@
 |:-----------------------------------------------------------------------|:-------------------------|
 | [Amazon EBS CSI Driver](./scripts/aws-ebs-csi-driver)                  | :white_check_mark:       |
 | [Amazon EFS CSI Driver](./scripts/aws-efs-csi-driver)                  | :white_check_mark:       |
-| [Amazon FSX CSI Driver](./scripts/aws-fsx-csi-driver)                  | :white_check_mark:       |
 | [AWS Load Balancer Controller](./scripts/aws-load-balancer-controller) | :white_check_mark:       |
 | [App Mesh Controller](./scripts/appmesh-controller)                    | :white_check_mark:       |
 | [AWS Gateway API Controller](./scripts/aws-gateway-api-controller)     | :white_check_mark:       |
