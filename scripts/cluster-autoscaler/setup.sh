@@ -7,7 +7,17 @@ EKS_CLUSTER_NAME="${EKS_CLUSTER_NAME}"
 IAM_POLICY_NAME="${IAM_POLICY_NAME_ClusterAutoScaler}"
 SERVICE_ACCOUNT_NAME="${SERVICE_ACCOUNT_NAME_ClusterAutoScaler}"
 
-CLUSTER_AUTOSCALER_IMAGE_TAG="v1.29.0"
+# CHART VERSION	APP VERSION
+# ---------------------------
+# 9.35.0       	1.29.0
+# 9.34.1       	1.28.2
+# 9.33.0       	1.27.2
+# 9.28.0       	1.26.2
+# 9.27.0       	1.24.0
+# 9.24.0       	1.23.0
+
+APP_VERSION="v1.29.0"
+CHART_VERSION="9.35.0"
 
 # HINT: if there have multiple cluster-autoscaler running under the same cluster, you might need to customize these variables.
 NAMESPACE="kube-system"
@@ -69,6 +79,7 @@ echo "[debug] setup autoscaler/cluster-autoscaler"
 helm upgrade \
   --namespace ${NAMESPACE} \
   --install cluster-autoscaler \
+  --version ${CHART_VERSION} \
   autoscaler/cluster-autoscaler \
     --set awsRegion=${AWS_REGION} \
     --set clusterAPIConfigMapsNamespace=${NAMESPACE} \
@@ -76,7 +87,7 @@ helm upgrade \
     --set rbac.serviceAccount.name=${SERVICE_ACCOUNT_NAME} \
     --set autoDiscovery.clusterName=${EKS_CLUSTER_NAME} \
     --set fullnameOverride="${FULLNAME_OVERRIDE}" \
-    --set image.tag="${CLUSTER_AUTOSCALER_IMAGE_TAG}"
+    --set image.tag="${APP_VERSION}"
 
 echo "[debug] listing installed"
 helm list --all-namespaces --filter cluster-autoscaler
