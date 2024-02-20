@@ -2,14 +2,18 @@
 
 # CHART VERSION	APP VERSION
 # ---------------------------
-# 0.23.0       	1.21.0
 # 0.22.0       	1.20.0
+# 0.21.0       	1.19.0
+# 0.20.3       	1.18.3
 
-# ref: https://github.com/aws/aws-node-termination-handler/releases/tag/v1.21.0
-# ref: https://github.com/aws/aws-node-termination-handler/tree/v1.21.0/config/helm/aws-node-termination-handler
+# known issue:
+# - https://github.com/aws/aws-node-termination-handler/issues/954
 
-APP_VERSION="1.20.0" # image for 1.21.0 is not yet published
+APP_VERSION="1.20.0"
 CHART_VERSION="0.22.0"
+
+echo "[debug] log into Public ECR"
+aws ecr-public get-login-password --region us-east-1 | helm registry login --username AWS --password-stdin public.ecr.aws
 
 echo "[debug] detecting Helm resource existance"
 helm list --all-namespaces | grep -q 'aws-node-termination-handler'
