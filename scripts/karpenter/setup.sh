@@ -9,15 +9,16 @@ IAM_ROLE_NAME="${IAM_ROLE_NAME_Karpenter}"
 SERVICE_ACCOUNT_NAME="${SERVICE_ACCOUNT_NAME_Karpenter}"
 
 # Before upgrade, you should always check latest upgrade guide:
+# - https://karpenter.sh/preview/concepts/nodeclasses/
 # - https://karpenter.sh/preview/upgrade-guide/
+# - https://karpenter.sh/v0.32/upgrading/v1beta1-migration/
 
 # CHART VERSION	            APP VERSION
 # ----------------------------------------
-# karpenter-v0.34.1        	0.34.1   # ref: https://github.com/aws/karpenter/releases/tag/v0.34.1 (recommend)
-# karpenter-v0.33.2        	0.33.2   # ref: https://github.com/aws/karpenter/releases/tag/v0.33.2
+# karpenter-v0.35.0        	0.35.0   # ref: https://github.com/aws/karpenter/releases/tag/v0.35.0 (recommend)
 
-APP_VERSION="0.34.1"
-CHART_VERSION="0.34.1"
+APP_VERSION="0.35.0"
+CHART_VERSION="0.35.0"
 
 echo "[debug] detecting AWS Account ID"
 export AWS_ACCOUNT_ID=$(aws sts get-caller-identity --query Account --output text)
@@ -36,7 +37,7 @@ else
 fi
 
 echo "[debug] setup IAM resources"
-curl -fsSL "https://raw.githubusercontent.com/aws/karpenter/v${APP_VERSION}/website/content/en/preview/getting-started/getting-started-with-karpenter/cloudformation.yaml" -O
+curl -fsSL "https://raw.githubusercontent.com/aws/karpenter-provider-aws/v${APP_VERSION}/website/content/en/preview/getting-started/getting-started-with-karpenter/cloudformation.yaml" -O
 
 if [ ! -f "cloudformation.yaml" ]; then
   echo "Failed to download cloudformation.yaml"
@@ -89,19 +90,17 @@ helm upgrade \
   --namespace karpenter \
   --create-namespace \
   --install karpenter \
-  --version v${CHART_VERSION} \
+  --version ${CHART_VERSION} \
   oci://public.ecr.aws/karpenter/karpenter \
     --set serviceAccount.create=false \
     --set serviceAccount.name=${SERVICE_ACCOUNT_NAME} \
     --set serviceAccount.annotations."eks\.amazonaws\.com/role-arn"="arn:aws:iam::${AWS_ACCOUNT_ID}:role/${IAM_ROLE_NAME}" \
-    --set settings.aws.clusterName=${EKS_CLUSTER_NAME} \
+    --set settings.clusterName=${EKS_CLUSTER_NAME} \
     --set settings.interruptionQueue=${EKS_CLUSTER_NAME} \
-    --set settings.aws.clusterEndpoint=${CLUSTER_ENDPOINT} \
-    --set settings.aws.defaultInstanceProfile=KarpenterNodeInstanceProfile-${EKS_CLUSTER_NAME} \
-    --set settings.aws.interruptionQueueName=${EKS_CLUSTER_NAME} \
+    --set settings.clusterEndpoint=${CLUSTER_ENDPOINT} \
     --set controller.resources.requests.cpu=1 \
-    --set controller.resources.limits.cpu=1 \
     --set controller.resources.requests.memory=1Gi \
+    --set controller.resources.limits.cpu=1 \
     --set controller.resources.limits.memory=1Gi \
     --wait
 
