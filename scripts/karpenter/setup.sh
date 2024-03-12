@@ -98,8 +98,8 @@ helm upgrade \
     --set settings.clusterName=${EKS_CLUSTER_NAME} \
     --set settings.interruptionQueue=${EKS_CLUSTER_NAME} \
     --set settings.clusterEndpoint=${CLUSTER_ENDPOINT} \
-    --set controller.resources.requests.cpu=1 \
-    --set controller.resources.requests.memory=1Gi \
+    --set controller.resources.requests.cpu=500m \
+    --set controller.resources.requests.memory=500Mi \
     --set controller.resources.limits.cpu=1 \
     --set controller.resources.limits.memory=1Gi \
     --wait
