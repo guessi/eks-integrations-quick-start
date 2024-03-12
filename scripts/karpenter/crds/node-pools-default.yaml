@@ -6,6 +6,8 @@ metadata:
   name: default
 spec:
   disruption:
+    budgets:
+    - nodes: 10%
     consolidationPolicy: WhenUnderutilized
     # consolidateAfter: 30s
     expireAfter: 720h0m0s
