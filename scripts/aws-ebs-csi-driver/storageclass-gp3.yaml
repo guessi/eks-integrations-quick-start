@@ -7,6 +7,7 @@ metadata:
   #   storageclass.kubernetes.io/is-default-class: "false"
   name: gp3-delete
 provisioner: ebs.csi.aws.com
+# allowVolumeExpansion: true
 volumeBindingMode: WaitForFirstConsumer
 reclaimPolicy: Delete
 # ref: https://github.com/kubernetes-sigs/aws-ebs-csi-driver/blob/master/docs/parameters.md
@@ -28,6 +29,7 @@ metadata:
   #   storageclass.kubernetes.io/is-default-class: "false"
   name: gp3-retain
 provisioner: ebs.csi.aws.com
+# allowVolumeExpansion: true
 volumeBindingMode: WaitForFirstConsumer
 reclaimPolicy: Retain
 # ref: https://github.com/kubernetes-sigs/aws-ebs-csi-driver/blob/master/docs/parameters.md
