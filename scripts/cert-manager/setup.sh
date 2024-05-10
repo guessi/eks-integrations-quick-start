@@ -2,11 +2,11 @@
 
 # CHART VERSION	APP VERSION
 # ---------------------------
-# v1.14.2      	v1.14.2
-# v1.13.3      	v1.13.3
+# v1.14.5      	v1.14.5
+# v1.13.6      	v1.13.6
 
-APP_VERSION="1.14.2"
-CHART_VERSION="v1.14.2"
+APP_VERSION="1.14.5"
+CHART_VERSION="v1.14.5"
 
 echo "[debug] detecting chart repo existance"
 helm repo list | grep -q 'cert-manager'
