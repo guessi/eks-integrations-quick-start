@@ -7,10 +7,10 @@ EKS_CLUSTER_NAME="${EKS_CLUSTER_NAME}"
 IAM_POLICY_NAME="VPCLatticeControllerIAMPolicy"
 SERVICE_ACCOUNT_NAME="gateway-api-controller"
 
-# ref: https://github.com/aws/aws-application-networking-k8s/blob/release-v1.0.3/docs/guides/deploy.md
+# ref: https://github.com/aws/aws-application-networking-k8s/blob/release-v1.0.5/docs/guides/deploy.md
 
-APP_VERSION="1.0.3"
-CHART_VERSION="1.0.3"
+APP_VERSION="1.0.5"
+CHART_VERSION="1.0.5"
 
 echo "[debug] detecting AWS Account ID"
 export AWS_ACCOUNT_ID=$(aws sts get-caller-identity --query Account --output text)
@@ -19,7 +19,7 @@ echo "[debug] AWS Account ID: ${AWS_ACCOUNT_ID}"
 echo "[debug] detecting namespace existance"
 kubectl get namespace | grep -q 'aws-application-networking-system'
 if [ $? -ne 0 ]; then
-  kubectl apply -f https://raw.githubusercontent.com/aws/aws-application-networking-k8s/release-v${APP_VERSION}/examples/deploy-namesystem.yaml
+  kubectl apply -f https://raw.githubusercontent.com/aws/aws-application-networking-k8s/main/files/controller-installation/deploy-namesystem.yaml
 else
   echo "[debug] namespace existed"
 fi
@@ -75,7 +75,7 @@ helm list --all-namespaces --filter gateway-api-controller
 echo "[debug] setup GatewayClass"
 if ! kubectl get GatewayClass | grep -q 'amazon-vpc-lattice'; then
   echo "[debug] GatewayClass 'amazon-vpc-lattice' not found, creating"
-  kubectl apply -f https://raw.githubusercontent.com/aws/aws-application-networking-k8s/release-v${APP_VERSION}/examples/gatewayclass.yaml
+  kubectl apply -f https://raw.githubusercontent.com/aws/aws-application-networking-k8s/main/files/controller-installation/gatewayclass.yaml
   kubectl get GatewayClass
 else
   echo "[debug] GatewayClass 'amazon-vpc-lattice' existed"
