@@ -7,20 +7,27 @@ EKS_CLUSTER_NAME="${EKS_CLUSTER_NAME}"
 IAM_POLICY_NAME="${IAM_POLICY_NAME_Karpenter}"
 IAM_ROLE_NAME="${IAM_ROLE_NAME_Karpenter}"
 SERVICE_ACCOUNT_NAME="${SERVICE_ACCOUNT_NAME_Karpenter}"
+KARPENTER_NAMESPACE="kube-system"
 
+# Karpenter 1.0 released, it is always encourage to upgrade
+# - https://aws.amazon.com/about-aws/whats-new/2024/08/karpenter-1-0/
+# - https://aws.amazon.com/blogs/containers/announcing-karpenter-1-0/
+#
 # Before upgrade, you should always check latest upgrade guide:
-# - https://karpenter.sh/preview/concepts/nodeclasses/
 # - https://karpenter.sh/preview/upgrade-guide/
 # - https://karpenter.sh/v0.32/upgrading/v1beta1-migration/
+# - https://karpenter.sh/v1.0/upgrading/v1-migration/
+
 
 # CHART VERSION	            APP VERSION
 # ----------------------------------------
-# karpenter-v0.37.0        	0.37.0   # ref: https://github.com/aws/karpenter/releases/tag/v0.37.0 (recommend)
-# karpenter-v0.36.2        	0.36.2   # ref: https://github.com/aws/karpenter/releases/tag/v0.36.2
-# karpenter-v0.35.5        	0.35.5   # ref: https://github.com/aws/karpenter/releases/tag/v0.35.5
+# karpenter-v1.0.0         	1.0.0    # ref: https://github.com/aws/karpenter/releases/tag/v1.0.0 (recommend)
+# karpenter-v0.37.1        	0.37.1   # ref: https://github.com/aws/karpenter/releases/tag/v0.37.1
+# karpenter-v0.36.3        	0.36.3   # ref: https://github.com/aws/karpenter/releases/tag/v0.36.3
+# karpenter-v0.35.6        	0.35.6   # ref: https://github.com/aws/karpenter/releases/tag/v0.35.6
 
-APP_VERSION="0.37.0"
-CHART_VERSION="0.37.0"
+APP_VERSION="1.0.0"
+CHART_VERSION="1.0.0"
 
 echo "[debug] detecting AWS Account ID"
 export AWS_ACCOUNT_ID=$(aws sts get-caller-identity --query Account --output text)
@@ -30,16 +37,8 @@ echo "[debug] detecting cluster endpoint"
 export CLUSTER_ENDPOINT="$(aws eks describe-cluster --name ${EKS_CLUSTER_NAME} --query "cluster.endpoint" --output text --region ${AWS_REGION})"
 echo "[debug] CLUSTER ENDPOINT: ${CLUSTER_ENDPOINT}"
 
-echo "[debug] detecting namespace existance"
-kubectl get namespace | grep -q 'karpenter'
-if [ $? -ne 0 ]; then
-  kubectl create namespace karpenter
-else
-  echo "[debug] namespace existed"
-fi
-
 echo "[debug] setup IAM resources"
-curl -fsSL "https://raw.githubusercontent.com/aws/karpenter-provider-aws/v${APP_VERSION}/website/content/en/preview/getting-started/getting-started-with-karpenter/cloudformation.yaml" -O
+curl -fsSL "https://raw.githubusercontent.com/aws/karpenter-provider-aws/v${APP_VERSION}/website/content/en/docs/getting-started/getting-started-with-karpenter/cloudformation.yaml" -O
 
 if [ ! -f "cloudformation.yaml" ]; then
   echo "Failed to download cloudformation.yaml"
@@ -65,7 +64,7 @@ eksctl create iamidentitymapping \
 
 echo "[debug] creating IAM Roles for Service Accounts"
 eksctl create iamserviceaccount \
-  --namespace karpenter \
+  --namespace ${KARPENTER_NAMESPACE} \
   --region ${AWS_REGION} \
   --cluster ${EKS_CLUSTER_NAME} \
   --name ${SERVICE_ACCOUNT_NAME} \
@@ -75,12 +74,10 @@ eksctl create iamserviceaccount \
   --override-existing-serviceaccounts
 
 echo "[debug] creating Custom Resource Definition (CRDs)"
-kubectl apply -f https://raw.githubusercontent.com/aws/karpenter/v${CHART_VERSION}/pkg/apis/crds/karpenter.sh_nodepools.yaml
-kubectl apply -f https://raw.githubusercontent.com/aws/karpenter/v${CHART_VERSION}/pkg/apis/crds/karpenter.sh_nodeclaims.yaml
-kubectl apply -f https://raw.githubusercontent.com/aws/karpenter/v${CHART_VERSION}/pkg/apis/crds/karpenter.k8s.aws_ec2nodeclasses.yaml
+helm upgrade --install karpenter-crd oci://public.ecr.aws/karpenter/karpenter-crd --version ${CHART_VERSION} --namespace "${KARPENTER_NAMESPACE}" --create-namespace
 
 echo "[debug] detecting Helm resource existance"
-helm list --all-namespaces | grep -q 'karpenter'
+helm list --all-namespaces | grep -q "${KARPENTER_NAMESPACE}"
 
 # https://github.com/aws/karpenter/pull/3880
 echo "[debug] ensure helm registry is logout"
@@ -89,7 +86,7 @@ helm registry logout public.ecr.aws
 echo "[debug] setup karpenter/karpenter"
 
 helm upgrade \
-  --namespace karpenter \
+  --namespace ${KARPENTER_NAMESPACE} \
   --create-namespace \
   --install karpenter \
   --version ${CHART_VERSION} \
