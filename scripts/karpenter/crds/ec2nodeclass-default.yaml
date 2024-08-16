@@ -5,7 +5,7 @@ kind: EC2NodeClass
 metadata:
   name: default
 spec:
-  amiFamily: AL2
+  amiFamily: AL2023
   subnetSelectorTerms:
   - tags:
       karpenter.sh/discovery: eks-demo
