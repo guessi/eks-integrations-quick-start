@@ -1,6 +1,6 @@
 # ref: https://karpenter.sh/preview/concepts/nodepools/
 ---
-apiVersion: karpenter.sh/v1beta1
+apiVersion: karpenter.sh/v1
 kind: NodePool
 metadata:
   name: default
@@ -8,9 +8,8 @@ spec:
   disruption:
     budgets:
     - nodes: 10%
-    consolidationPolicy: WhenUnderutilized
-    # consolidateAfter: 30s
-    expireAfter: 720h0m0s
+    consolidationPolicy: WhenEmptyOrUnderutilized
+    consolidateAfter: 30s
   limits:
     cpu: 1000
     memory: 1000Gi
@@ -19,8 +18,11 @@ spec:
       labels:
         managed-by: karpenter
     spec:
-      kubelet: {}
+      expireAfter: 720h
+      terminationGracePeriod: 48h
       nodeClassRef:
+        group: karpenter.k8s.aws
+        kind: EC2NodeClass
         name: default
       requirements:
       - key: karpenter.sh/capacity-type
