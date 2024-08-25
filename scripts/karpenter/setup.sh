@@ -21,13 +21,13 @@ KARPENTER_NAMESPACE="kube-system"
 
 # CHART VERSION	            APP VERSION
 # ----------------------------------------
-# karpenter-v1.0.0         	1.0.0    # ref: https://github.com/aws/karpenter/releases/tag/v1.0.0 (recommend)
-# karpenter-v0.37.1        	0.37.1   # ref: https://github.com/aws/karpenter/releases/tag/v0.37.1
-# karpenter-v0.36.3        	0.36.3   # ref: https://github.com/aws/karpenter/releases/tag/v0.36.3
-# karpenter-v0.35.6        	0.35.6   # ref: https://github.com/aws/karpenter/releases/tag/v0.35.6
+# karpenter-v1.0.1         	1.0.1    # ref: https://github.com/aws/karpenter/releases/tag/v1.0.1 (recommend)
+# karpenter-v0.37.2        	0.37.2   # ref: https://github.com/aws/karpenter/releases/tag/v0.37.2
+# karpenter-v0.36.4        	0.36.4   # ref: https://github.com/aws/karpenter/releases/tag/v0.36.4
+# karpenter-v0.35.7        	0.35.7   # ref: https://github.com/aws/karpenter/releases/tag/v0.35.7
 
-APP_VERSION="1.0.0"
-CHART_VERSION="1.0.0"
+APP_VERSION="1.0.1"
+CHART_VERSION="1.0.1"
 
 echo "[debug] detecting AWS Account ID"
 export AWS_ACCOUNT_ID=$(aws sts get-caller-identity --query Account --output text)
@@ -38,7 +38,7 @@ export CLUSTER_ENDPOINT="$(aws eks describe-cluster --name ${EKS_CLUSTER_NAME} -
 echo "[debug] CLUSTER ENDPOINT: ${CLUSTER_ENDPOINT}"
 
 echo "[debug] setup IAM resources"
-curl -fsSL "https://raw.githubusercontent.com/aws/karpenter-provider-aws/v${APP_VERSION}/website/content/en/docs/getting-started/getting-started-with-karpenter/cloudformation.yaml" -O
+curl -fsSL "https://raw.githubusercontent.com/aws/karpenter-provider-aws/v${APP_VERSION}/website/content/en/preview/getting-started/getting-started-with-karpenter/cloudformation.yaml" -O
 
 if [ ! -f "cloudformation.yaml" ]; then
   echo "Failed to download cloudformation.yaml"
