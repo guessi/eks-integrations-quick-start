@@ -25,6 +25,7 @@
 | [Metrics Server](./scripts/metrics-server)                                        | :heavy_minus_sign:       |
 | [kube-state-metrics](./scripts/kube-state-metrics)                                | :heavy_minus_sign:       |
 | [Cert Manager](./scripts/cert-manager)                                            | :heavy_minus_sign:       |
+| [Grafana](./scripts/grafana)                                                      | :heavy_minus_sign:       |
 | [Prometheus](./scripts/prometheus)                                                | :heavy_minus_sign:       |
 | [Prometheus Adapter](./scripts/prometheus-adapter)                                | :heavy_minus_sign:       |
 | [Prometheus Alertmanager](./scripts/alertmanager)                                 | :heavy_minus_sign:       |
