@@ -1,16 +1,7 @@
 #!/usr/bin/env bash
 
-# CHART VERSION	APP VERSION
-# ---------------------------
-# 0.22.0       	1.20.0
-# 0.21.0       	1.19.0
-# 0.20.3       	1.18.3
-
-# known issue:
-# - https://github.com/aws/aws-node-termination-handler/issues/954
-
-APP_VERSION="1.20.0"
-CHART_VERSION="0.22.0"
+APP_VERSION="1.22.1"
+CHART_VERSION="0.24.1"
 
 echo "[debug] log into Public ECR"
 aws ecr-public get-login-password --region us-east-1 | helm registry login --username AWS --password-stdin public.ecr.aws
