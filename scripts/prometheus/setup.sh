@@ -30,11 +30,11 @@ echo "[debug] setup prometheus-community/prometheus"
 helm upgrade \
   --namespace prometheus \
   --install prometheus \
-  prometheus-community/prometheus \
-  --set alertmanager.enabled=false \
-  --set kube-state-metrics.enabled=false \
-  --set prometheus-node-exporter.enabled=false \
-  --set prometheus-pushgateway.enabled=false
+  prometheus-community/prometheus
+  # --set alertmanager.enabled=false \
+  # --set kube-state-metrics.enabled=false \
+  # --set prometheus-node-exporter.enabled=false \
+  # --set prometheus-pushgateway.enabled=false
 
 echo "[debug] listing installed"
 helm list --all-namespaces --filter prometheus
