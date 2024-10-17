@@ -24,9 +24,9 @@ parameters:
 apiVersion: storage.k8s.io/v1
 kind: StorageClass
 metadata:
-  # annotations:
-  #   # ref: https://kubernetes.io/docs/tasks/administer-cluster/change-default-storage-class/#changing-the-default-storageclass
-  #   storageclass.kubernetes.io/is-default-class: "false"
+  annotations:
+    # ref: https://kubernetes.io/docs/tasks/administer-cluster/change-default-storage-class/#changing-the-default-storageclass
+    storageclass.kubernetes.io/is-default-class: "true"
   name: gp3-retain
 provisioner: ebs.csi.aws.com
 # allowVolumeExpansion: true
