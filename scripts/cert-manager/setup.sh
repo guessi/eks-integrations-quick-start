@@ -2,11 +2,10 @@
 
 # CHART VERSION	APP VERSION
 # ---------------------------
-# v1.14.5      	v1.14.5
-# v1.13.6      	v1.13.6
+# v1.16.1      	v1.16.1
 
-APP_VERSION="1.14.5"
-CHART_VERSION="v1.14.5"
+APP_VERSION="1.16.1"
+CHART_VERSION="v1.16.1"
 
 echo "[debug] detecting chart repo existance"
 helm repo list | grep -q 'cert-manager'
@@ -32,7 +31,7 @@ else
 fi
 
 # echo "[debug] creating Custom Resource Definition (CRDs)"
-# kubectl apply -f https://github.com/cert-manager/cert-manager/releases/download/v1.14.2/cert-manager.crds.yaml
+# kubectl apply -f https://github.com/cert-manager/cert-manager/releases/download/v1.16.1/cert-manager.crds.yaml
 
 echo "[debug] detecting Helm resource existance"
 helm list --all-namespaces | grep -q 'cert-manager'
@@ -45,7 +44,9 @@ helm upgrade \
     --namespace cert-manager \
     --create-namespace \
     --version ${CHART_VERSION} \
-    --set installCRDs=true
+    --set installCRDs=true \
+    --set prometheus.enabled=false \
+    --set webhook.timeoutSeconds=4
 
 echo "[debug] listing installed"
 helm list --all-namespaces --filter cert-manager
