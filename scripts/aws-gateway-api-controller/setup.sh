@@ -7,10 +7,10 @@ EKS_CLUSTER_NAME="${EKS_CLUSTER_NAME}"
 IAM_POLICY_NAME="VPCLatticeControllerIAMPolicy"
 SERVICE_ACCOUNT_NAME="gateway-api-controller"
 
-# ref: https://github.com/aws/aws-application-networking-k8s/blob/release-v1.0.5/docs/guides/deploy.md
+# ref: https://github.com/aws/aws-application-networking-k8s/blob/release-v1.0.6/docs/guides/deploy.md
 
-APP_VERSION="1.0.5"
-CHART_VERSION="1.0.5"
+APP_VERSION="1.0.6"
+CHART_VERSION="1.0.6"
 
 echo "[debug] detecting AWS Account ID"
 export AWS_ACCOUNT_ID=$(aws sts get-caller-identity --query Account --output text)
