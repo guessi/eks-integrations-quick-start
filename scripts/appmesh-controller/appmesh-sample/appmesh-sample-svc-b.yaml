@@ -1,0 +1,109 @@
+---
+apiVersion: appmesh.k8s.aws/v1beta2
+kind: VirtualNode
+metadata:
+  name: my-service-b
+  namespace: my-apps
+spec:
+  podSelector:
+    matchLabels:
+      app: my-app-2
+  listeners:
+  - healthCheck:
+      healthyThreshold: 2
+      intervalMillis: 5000
+      path: /
+      protocol: http
+      timeoutMillis: 2000
+      unhealthyThreshold: 2
+    portMapping:
+      port: 80
+      protocol: http
+  backends:
+  - virtualService:
+      virtualServiceRef:
+       name: my-service-a
+       namespace: my-apps
+  - virtualService:
+      virtualServiceRef:
+       name: my-service-c
+       namespace: my-apps
+  logging:
+    accessLog:
+      file:
+        path: /dev/stdout
+  serviceDiscovery:
+    dns:
+      hostname: my-service-b.my-apps.svc.cluster.local
+---
+apiVersion: appmesh.k8s.aws/v1beta2
+kind: VirtualRouter
+metadata:
+  namespace: my-apps
+  name: my-service-b-virtual-router
+spec:
+  listeners:
+    - portMapping:
+        port: 80
+        protocol: http
+  routes:
+    - name: my-service-b-route
+      httpRoute:
+        match:
+          prefix: /
+        action:
+          weightedTargets:
+            - virtualNodeRef:
+                name: my-service-b
+              weight: 1
+---
+apiVersion: appmesh.k8s.aws/v1beta2
+kind: VirtualService
+metadata:
+  name: my-service-b
+  namespace: my-apps
+spec:
+  awsName: my-service-b.my-apps.svc.cluster.local
+  provider:
+    virtualRouter:
+      virtualRouterRef:
+        name: my-service-b-virtual-router
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: my-service-b
+  namespace: my-apps
+  labels:
+    app: my-app-2
+spec:
+  selector:
+    app: my-app-2
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: my-service-b
+  namespace: my-apps
+  labels:
+    app: my-app-2
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: my-app-2
+  template:
+    metadata:
+      labels:
+        app: my-app-2
+    spec:
+      serviceAccountName: my-service
+      containers:
+      - name: nginx
+        image: nginx
+        ports:
+        - containerPort: 80

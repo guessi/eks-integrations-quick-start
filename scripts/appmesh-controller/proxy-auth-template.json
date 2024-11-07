@@ -1,0 +1,12 @@
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Effect": "Allow",
+            "Action": "appmesh:StreamAggregatedResources",
+            "Resource": [
+                "arn:aws:appmesh:{{ REGION }}:{{ AWS_ACCOUNT_ID }}:mesh/my-mesh/virtualNode/*"
+            ]
+        }
+    ]
+}

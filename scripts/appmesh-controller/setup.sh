@@ -9,6 +9,8 @@ SERVICE_ACCOUNT_NAME="${SERVICE_ACCOUNT_NAME_AppMeshController}"
 
 # CHART VERSION APP VERSION
 # ---------------------------
+# 1.13.1        1.13.1
+# 1.13.0        1.13.0
 # 1.12.7        1.12.7
 # 1.12.5        1.12.5
 # 1.12.3        1.12.3
@@ -16,11 +18,8 @@ SERVICE_ACCOUNT_NAME="${SERVICE_ACCOUNT_NAME_AppMeshController}"
 # 1.12.1        1.12.1
 # 1.11.0        1.11.0
 
-APP_VERSION="1.12.7"
-CHART_VERSION="1.12.7"
-CONTROLLER_IMAGE_TAG="v1.12.7"
-SIDECAR_IMAGE_TAG="v1.27.2.0-prod"
-INIT_IMAGE_TAG="v7-prod"
+APP_VERSION="1.13.1"
+CHART_VERSION="1.13.1"
 
 echo "[debug] detecting AWS Account ID"
 export AWS_ACCOUNT_ID=$(aws sts get-caller-identity --query Account --output text)
@@ -39,18 +38,6 @@ fi
 echo "[debug] helm repo update"
 helm repo update eks
 
-echo "[debug] detecting IAM policy existance"
-aws iam list-policies --query "Policies[].[PolicyName,UpdateDate]" --output text | grep "${IAM_POLICY_NAME}"
-
-if [ $? -ne 0 ]; then
-  echo "[debug] IAM policy existance not found, creating"
-  aws iam create-policy \
-    --policy-name ${IAM_POLICY_NAME} \
-    --policy-document file://policy.json
-else
-  echo "[debug] IAM policy existed"
-fi
-
 echo "[debug] detecting namespace existance"
 kubectl get namespace | grep -q 'appmesh-system'
 
@@ -67,12 +54,12 @@ eksctl create iamserviceaccount \
   --region ${AWS_REGION} \
   --cluster ${EKS_CLUSTER_NAME} \
   --name ${SERVICE_ACCOUNT_NAME} \
-  --attach-policy-arn arn:aws:iam::${AWS_ACCOUNT_ID}:policy/${IAM_POLICY_NAME} \
+  --attach-policy-arn  arn:aws:iam::aws:policy/AWSCloudMapFullAccess,arn:aws:iam::aws:policy/AWSAppMeshFullAccess \
   --approve \
   --override-existing-serviceaccounts
 
 echo "[debug] creating Custom Resource Definition (CRDs)"
-kubectl apply -k "github.com/aws/eks-charts//stable/appmesh-controller/crds?ref=master"
+kubectl apply -k "https://github.com/aws/eks-charts/stable/appmesh-controller/crds?ref=master"
 
 echo "[debug] detecting Helm resource existance"
 helm list --all-namespaces | grep -q 'appmesh-controller'
@@ -86,17 +73,20 @@ helm upgrade \
   eks/appmesh-controller \
     --set serviceAccount.create=false \
     --set serviceAccount.name=${SERVICE_ACCOUNT_NAME} \
-    --set image.repository=public.ecr.aws/appmesh/appmesh-controller \
-    --set image.tag=${CONTROLLER_IMAGE_TAG} \
-    --set sidecar.image.repository=public.ecr.aws/appmesh/aws-appmesh-envoy \
-    --set sidecar.image.tag=${SIDECAR_IMAGE_TAG} \
-    --set init.image.repository=602401143452.dkr.ecr.${AWS_REGION}.amazonaws.com/aws-appmesh-proxy-route-manager \
-    --set init.image.tag=${INIT_IMAGE_TAG} \
     --set region=${AWS_REGION}
-
-# the attributes above are copied from https://github.com/aws/eks-charts/blob/v0.0.127/stable/appmesh-controller/values.yaml (v0.0.127 is mapped to CHART_VERSION v1.11.0)
-# whenever you changed the CHART_VERSION or APP_VERSION, and don't foget the chagne the ACCOUNT_ID and REGION before run.
-# ref: https://docs.aws.amazon.com/app-mesh/latest/userguide/getting-started-kubernetes.html#install-controller
 
 echo "[debug] listing installed"
 helm list --all-namespaces --filter appmesh-controller
+
+echo "[debug] create iam policy for sample scenario"
+sed -e 's/{{ REGION }}/'${AWS_REGION}'/g' -e 's/{{ AWS_ACCOUNT_ID }}/'${AWS_ACCOUNT_ID}'/g' proxy-auth-template.json > proxy-auth.json
+aws iam create-policy --policy-name AppMesh-sample-policy --policy-document file://proxy-auth.json
+
+echo "[debug] create servcie account for sample scenario"
+eksctl create iamserviceaccount \
+    --cluster ${EKS_CLUSTER_NAME} \
+    --namespace my-apps \
+    --name my-service \
+    --attach-policy-arn  arn:aws:iam::${AWS_ACCOUNT_ID}:policy/AppMesh-sample-policy \
+    --override-existing-serviceaccounts \
+    --approve
