@@ -27,10 +27,6 @@
 | [Cert Manager](./scripts/cert-manager)                                            | :heavy_minus_sign:       | :white_check_mark:        |
 | [Grafana](./scripts/grafana)                                                      | :heavy_minus_sign:       | :white_check_mark:        |
 | [Prometheus](./scripts/prometheus)                                                | :heavy_minus_sign:       | :white_check_mark:        |
-| [Prometheus Adapter](./scripts/prometheus-adapter)                                | :heavy_minus_sign:       | :white_check_mark:        |
-| [Prometheus Alertmanager](./scripts/alertmanager)                                 | :heavy_minus_sign:       | :white_check_mark:        |
-| [Prometheus Node Exporter](./scripts/prometheus-node-exporter)                    | :heavy_minus_sign:       | :white_check_mark:        |
-| [Prometheus Pushgateway](./scripts/prometheus-pushgateway)                        | :heavy_minus_sign:       | :white_check_mark:        |
 | [Ingress Nginx Controller](./scripts/ingress-nginx-controller)                    | :heavy_minus_sign:       | :white_check_mark:        |
 
 ## License
