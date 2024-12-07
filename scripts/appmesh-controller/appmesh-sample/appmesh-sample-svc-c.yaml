@@ -22,12 +22,12 @@ spec:
   backends:
   - virtualService:
       virtualServiceRef:
-       name: my-service-a
-       namespace: my-apps
+        name: my-service-a
+        namespace: my-apps
   - virtualService:
       virtualServiceRef:
-       name: my-service-b
-       namespace: my-apps
+        name: my-service-b
+        namespace: my-apps
   logging:
     accessLog:
       file:
