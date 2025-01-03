@@ -16,12 +16,7 @@ SERVICE_ACCOUNT_NAME="${SERVICE_ACCOUNT_NAME_AwsLoadBalancerController}"
 # 1.7.2         v2.7.2 (preferred version for 2.7.x)
 
 # Kubernetes version requirements
-# * AWS Load Balancer Controller v2.0.0~v2.1.3 requires Kubernetes 1.15+
-# * AWS Load Balancer Controller v2.2.0~v2.3.1 requires Kubernetes 1.16-1.21
-# * AWS Load Balancer Controller v2.4.0+ requires Kubernetes 1.19+
-# * AWS Load Balancer Controller v2.5.0+ requires Kubernetes 1.22+
-#
-# ref: https://kubernetes-sigs.github.io/aws-load-balancer-controller/v2.10/deploy/installation/#supported-kubernetes-versions
+# - https://kubernetes-sigs.github.io/aws-load-balancer-controller/v2.11/deploy/installation/#supported-kubernetes-versions
 
 APP_VERSION="v2.11.0"
 CHART_VERSION="1.11.0"
