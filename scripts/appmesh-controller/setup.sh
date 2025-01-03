@@ -10,13 +10,6 @@ SERVICE_ACCOUNT_NAME="${SERVICE_ACCOUNT_NAME_AppMeshController}"
 # CHART VERSION APP VERSION
 # ---------------------------
 # 1.13.1        1.13.1
-# 1.13.0        1.13.0
-# 1.12.7        1.12.7
-# 1.12.5        1.12.5
-# 1.12.3        1.12.3
-# 1.12.2        1.12.2
-# 1.12.1        1.12.1
-# 1.11.0        1.11.0
 
 APP_VERSION="1.13.1"
 CHART_VERSION="1.13.1"
