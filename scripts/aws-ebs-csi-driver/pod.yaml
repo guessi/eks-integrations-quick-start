@@ -16,4 +16,4 @@ spec:
   volumes:
     - name: nginx-html
       persistentVolumeClaim:
-        claimName: pvc-gp2
+        claimName: pvc-gp3
