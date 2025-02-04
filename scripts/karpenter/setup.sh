@@ -21,15 +21,15 @@ KARPENTER_NAMESPACE="kube-system"
 
 # CHART VERSION             APP VERSION
 # ----------------------------------------
-# karpenter-v1.2.0          1.2.0    # ref: https://github.com/aws/karpenter/releases/tag/v1.2.0 (recommend)
-# karpenter-v1.1.2          1.1.2    # ref: https://github.com/aws/karpenter/releases/tag/v1.1.2
+# karpenter-v1.2.1          1.2.1    # ref: https://github.com/aws/karpenter/releases/tag/v1.2.1 (recommend)
+# karpenter-v1.1.3          1.1.3    # ref: https://github.com/aws/karpenter/releases/tag/v1.1.3
 # karpenter-v1.0.8          1.0.8    # ref: https://github.com/aws/karpenter/releases/tag/v1.0.8
-# karpenter-v0.37.6         0.37.6   # ref: https://github.com/aws/karpenter/releases/tag/v0.37.6
-# karpenter-v0.36.8         0.36.8   # ref: https://github.com/aws/karpenter/releases/tag/v0.36.8
-# karpenter-v0.35.11        0.35.11  # ref: https://github.com/aws/karpenter/releases/tag/v0.35.11
+# karpenter-v0.37.7         0.37.7   # ref: https://github.com/aws/karpenter/releases/tag/v0.37.7
+# karpenter-v0.36.9         0.36.9   # ref: https://github.com/aws/karpenter/releases/tag/v0.36.9
+# karpenter-v0.35.12        0.35.12  # ref: https://github.com/aws/karpenter/releases/tag/v0.35.12
 
-APP_VERSION="1.2.0"
-CHART_VERSION="1.2.0"
+APP_VERSION="1.2.1"
+CHART_VERSION="1.2.1"
 
 echo "[debug] detecting AWS Account ID"
 export AWS_ACCOUNT_ID=$(aws sts get-caller-identity --query Account --output text)
