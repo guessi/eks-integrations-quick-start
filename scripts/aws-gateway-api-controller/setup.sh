@@ -34,7 +34,21 @@ if [ $? -ne 0 ]; then
     --policy-name ${IAM_POLICY_NAME} \
     --policy-document file://recommended-inline-policy.json
 else
-  echo "[debug] IAM policy existed"
+  echo "[debug] IAM policy existed, checking difference"
+
+  IAM_POLICY_ARN=$(aws iam list-policies --query 'Policies[?PolicyName==`'${IAM_POLICY_NAME}'`].Arn' --output text)
+  RUNNING_VERSION=$(aws iam get-policy --policy-arn ${IAM_POLICY_ARN} --query 'Policy.DefaultVersionId' --output text)
+  aws iam get-policy-version --policy-arn ${IAM_POLICY_ARN} --version-id ${RUNNING_VERSION} --query 'PolicyVersion.Document' --output json > running-policy.json
+
+  diff recommended-inline-policy.json running-policy.json
+  if [ $? -ne 0 ]; then
+    aws iam create-policy-version \
+      --policy-arn ${IAM_POLICY_ARN} \
+      --policy-document file://recommended-inline-policy.json \
+      --set-as-default
+  else
+    echo "[debug] policy update skipped, no update required"
+  fi
 fi
 
 echo "[debug] creating IAM Roles for Service Accounts"
