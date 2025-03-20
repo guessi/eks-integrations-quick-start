@@ -9,9 +9,9 @@ SERVICE_ACCOUNT_NAME="${SERVICE_ACCOUNT_NAME_ClusterAutoScaler}"
 
 # CHART VERSION	APP VERSION
 # ---------------------------
-# 9.46.3       	1.32.0
+# 9.46.3       	1.32.1
 
-APP_VERSION="v1.32.0"
+APP_VERSION="v1.32.1"
 CHART_VERSION="9.46.3"
 
 # HINT: if there have multiple cluster-autoscaler running under the same cluster, you might need to customize these variables.
@@ -19,10 +19,9 @@ NAMESPACE="kube-system"
 FULLNAME_OVERRIDE="cluster-autoscaler"
 
 # Supported Versions:
-# - https://github.com/kubernetes/autoscaler/releases/tag/cluster-autoscaler-1.32.0
-# - https://github.com/kubernetes/autoscaler/releases/tag/cluster-autoscaler-1.31.1
-# - https://github.com/kubernetes/autoscaler/releases/tag/cluster-autoscaler-1.30.3
-# - https://github.com/kubernetes/autoscaler/releases/tag/cluster-autoscaler-1.29.5
+# - https://github.com/kubernetes/autoscaler/releases/tag/cluster-autoscaler-1.32.1
+# - https://github.com/kubernetes/autoscaler/releases/tag/cluster-autoscaler-1.31.2
+# - https://github.com/kubernetes/autoscaler/releases/tag/cluster-autoscaler-1.30.4
 
 echo "[debug] detecting AWS Account ID"
 export AWS_ACCOUNT_ID=$(aws sts get-caller-identity --query Account --output text)
