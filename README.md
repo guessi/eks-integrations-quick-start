@@ -24,6 +24,7 @@
 | [Cluster AutoScaler](./scripts/cluster-autoscaler)                                | :heavy_minus_sign:        | :heavy_minus_sign:        | :white_check_mark:        |
 | [Metrics Server](./scripts/metrics-server)                                        | :white_check_mark:        | :heavy_minus_sign:        | :white_check_mark:        |
 | [kube-state-metrics](./scripts/kube-state-metrics)                                | :white_check_mark:        | :heavy_minus_sign:        | :white_check_mark:        |
+| [prometheus-node-exporter](./scripts/prometheus-node-exporter)                    | :white_check_mark:        | :heavy_minus_sign:        | :white_check_mark:        |
 | [Cert Manager](./scripts/cert-manager)                                            | :white_check_mark:        | :heavy_minus_sign:        | :white_check_mark:        |
 | [Grafana](./scripts/grafana)                                                      | :heavy_minus_sign:        | :heavy_minus_sign:        | :white_check_mark:        |
 | [Prometheus](./scripts/prometheus)                                                | :heavy_minus_sign:        | :heavy_minus_sign:        | :white_check_mark:        |
