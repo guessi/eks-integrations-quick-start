@@ -1,52 +1,37 @@
 #!/usr/bin/env bash
 
-# CHART VERSION	APP VERSION
-# ---------------------------
-# v1.17.2      	v1.17.2
+source $(pwd)/../config.sh
 
-APP_VERSION="1.17.2"
-CHART_VERSION="v1.17.2"
+AWS_REGION="${EKS_CLUSTER_REGION}"
+EKS_CLUSTER_NAME="${EKS_CLUSTER_NAME}"
+ADDON_NAME="cert-manager"
 
-echo "[debug] detecting chart repo existance"
-helm repo list | grep -q 'cert-manager'
+echo "[debug] detecting AWS Account ID"
+export AWS_ACCOUNT_ID=$(aws sts get-caller-identity --query Account --output text)
+echo "[debug] AWS Account ID: ${AWS_ACCOUNT_ID}"
 
-if [ $? -ne 0 ]; then
-  echo "[debug] setup chart repo"
-  helm repo add jetstack https://charts.jetstack.io || true
+CLUSTER_VERSION=$(aws eks describe-cluster --name "${EKS_CLUSTER_NAME}" --region "${AWS_REGION}" --output "json" | jq -r '.cluster.version')
+echo "[debug] cluster version: ${CLUSTER_VERSION}"
+
+LATEST_ADD_VERSION=$(aws eks describe-addon-versions --addon-name "${ADDON_NAME}" --publishers "eks" --owners "community" --output "json" --kubernetes-version "${CLUSTER_VERSION}" | jq '.addons[].addonVersions[].addonVersion' -r | sort --version-sort --reverse | head -1)
+echo "[debug] latest addon version: ${LATEST_ADD_VERSION}"
+
+echo "[debug] create or update existing addon"
+if aws eks list-addons --cluster-name "${EKS_CLUSTER_NAME}" --region "${AWS_REGION}" --output "text" | grep -q "${ADDON_NAME}"; then
+    EXISTED_ADDON_VERSION=$(aws eks describe-addon --cluster-name "${EKS_CLUSTER_NAME}" --addon-name "${ADDON_NAME}" --region "${AWS_REGION}" --output "json" | jq -r '.addon.addonVersion')
+    echo "[debug] existed addon version: ${EXISTED_ADDON_VERSION}"
+
+    aws eks update-addon \
+      --cluster-name "${EKS_CLUSTER_NAME}" \
+      --region "${AWS_REGION}" \
+      --addon-name "${ADDON_NAME}" \
+      --addon-version "${LATEST_ADD_VERSION}" \
+      --resolve-conflicts "OVERWRITE"
 else
-  echo "[debug] found chart repo"
+    aws eks create-addon \
+      --cluster-name "${EKS_CLUSTER_NAME}" \
+      --region "${AWS_REGION}" \
+      --addon-name "${ADDON_NAME}" \
+      --addon-version "${LATEST_ADD_VERSION}" \
+      --resolve-conflicts "OVERWRITE"
 fi
-
-echo "[debug] helm repo update"
-helm repo update jetstack
-
-echo "[debug] detecting namespace existance"
-kubectl get namespace | grep -q 'cert-manager'
-
-if [ $? -ne 0 ]; then
-  echo "[debug] creating namespace"
-  kubectl create namespace cert-manager
-else
-  echo "[debug] found namespace"
-fi
-
-# echo "[debug] creating Custom Resource Definition (CRDs)"
-# kubectl apply -f https://github.com/cert-manager/cert-manager/releases/download/v1.17.2/cert-manager.crds.yaml
-
-echo "[debug] detecting Helm resource existance"
-helm list --all-namespaces | grep -q 'cert-manager'
-
-echo "[debug] setup jetstack/cert-manager"
-helm upgrade \
-  --namespace cert-manager \
-  --install cert-manager \
-  jetstack/cert-manager \
-    --namespace cert-manager \
-    --create-namespace \
-    --version ${CHART_VERSION} \
-    --set installCRDs=true \
-    --set prometheus.enabled=false \
-    --set webhook.timeoutSeconds=4
-
-echo "[debug] listing installed"
-helm list --all-namespaces --filter cert-manager
