@@ -6,12 +6,11 @@ AWS_REGION="${EKS_CLUSTER_REGION}"
 EKS_CLUSTER_NAME="${EKS_CLUSTER_NAME}"
 
 echo "[debug] detecting prefix list id for \"com.amazonaws.${AWS_REGION}.vpc-lattice\""
-PREFIX_LIST_ID=$(aws ec2 describe-managed-prefix-lists --query "PrefixLists[?PrefixListName=="\'com.amazonaws.${AWS_REGION}.vpc-lattice\'"].PrefixListId" --output "json" --region "${AWS_REGION}" | jq -r '.[]')
+PREFIX_LIST_ID=$(aws ec2 describe-managed-prefix-lists --query "PrefixLists[?PrefixListName=='com.amazonaws.${AWS_REGION}.vpc-lattice'].PrefixListId" | jq -r '.[]')
 echo "[debug] ${PREFIX_LIST_ID}"
 
 echo "[debug] detecting prefix list id for \"com.amazonaws.${AWS_REGION}.ipv6.vpc-lattice\""
-PREFIX_LIST_ID_IPV6=$(aws ec2 describe-managed-prefix-lists --query "PrefixLists[?PrefixListName=="\'com.amazonaws.$AWS_REGION.ipv6.vpc-lattice\'"].PrefixListId" --output "json" --region "${AWS_REGION}" | jq -r '.[]')
-echo "[debug] ${PREFIX_LIST_ID_IPV6}"
+PREFIX_LIST_ID_IPV6=$(aws ec2 describe-managed-prefix-lists --query "PrefixLists[?PrefixListName=='com.amazonaws.${AWS_REGION}.ipv6.vpc-lattice'].PrefixListId" | jq -r '.[]')echo "[debug] ${PREFIX_LIST_ID_IPV6}"
 
 echo "[debug] detecting cluster security group"
 CLUSTER_SG=$(aws eks describe-cluster --name "${EKS_CLUSTER_NAME}" --output "json" --region "${AWS_REGION}" | jq -r '.cluster.resourcesVpcConfig.clusterSecurityGroupId')
