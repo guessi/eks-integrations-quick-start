@@ -22,7 +22,7 @@
 | [Karpenter](./scripts/karpenter)                                                  | :heavy_minus_sign:        | :white_check_mark:        | :heavy_minus_sign:        |
 | [Container Insights with Fluent-bit](./scripts/container-insights-with-fluentBit) | :heavy_minus_sign:        | :white_check_mark:        | :heavy_minus_sign:        |
 | [Cluster AutoScaler](./scripts/cluster-autoscaler)                                | :heavy_minus_sign:        | :heavy_minus_sign:        | :white_check_mark:        |
-| [Metrics Server](./scripts/metrics-server)                                        | :heavy_minus_sign:        | :heavy_minus_sign:        | :white_check_mark:        |
+| [Metrics Server](./scripts/metrics-server)                                        | :white_check_mark:        | :heavy_minus_sign:        | :white_check_mark:        |
 | [kube-state-metrics](./scripts/kube-state-metrics)                                | :heavy_minus_sign:        | :heavy_minus_sign:        | :white_check_mark:        |
 | [Cert Manager](./scripts/cert-manager)                                            | :heavy_minus_sign:        | :heavy_minus_sign:        | :white_check_mark:        |
 | [Grafana](./scripts/grafana)                                                      | :heavy_minus_sign:        | :heavy_minus_sign:        | :white_check_mark:        |
