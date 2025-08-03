@@ -42,6 +42,21 @@ if aws eks list-addons --cluster-name "${EKS_CLUSTER_NAME}" --region "${AWS_REGI
       --addon-name "${ADDON_NAME}" \
       --addon-version "${LATEST_ADD_VERSION}" \
       --service-account-role-arn "${IRSA_ROLE_NAME}" \
+      --configuration-values '{
+        "controller": {
+          "volumeModificationFeature": {
+              "enabled": true
+          }
+        },
+        "node": {
+          "enableWindows": false
+        },
+        "sidecars": {
+          "snapshotter": {
+            "forceEnable": false
+          }
+        }
+      }' \
       --resolve-conflicts "OVERWRITE"
 else
     aws eks create-addon \
@@ -50,5 +65,20 @@ else
       --addon-name "${ADDON_NAME}" \
       --addon-version "${LATEST_ADD_VERSION}" \
       --service-account-role-arn "${IRSA_ROLE_NAME}" \
+      --configuration-values '{
+        "controller": {
+          "volumeModificationFeature": {
+              "enabled": true
+          }
+        },
+        "node": {
+          "enableWindows": false
+        },
+        "sidecars": {
+          "snapshotter": {
+            "forceEnable": false
+          }
+        }
+      }' \
       --resolve-conflicts "OVERWRITE"
 fi
