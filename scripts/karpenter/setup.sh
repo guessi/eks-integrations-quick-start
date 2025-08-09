@@ -24,8 +24,6 @@ KARPENTER_NAMESPACE="kube-system"
 # karpenter-v1.6.1          1.6.1    # ref: https://github.com/aws/karpenter/releases/tag/v1.6.1 (recommend)
 # karpenter-v1.5.3          1.5.3    # ref: https://github.com/aws/karpenter/releases/tag/v1.5.3
 # karpenter-v1.4.0          1.4.0    # ref: https://github.com/aws/karpenter/releases/tag/v1.4.0
-# karpenter-v1.3.4          1.3.4    # ref: https://github.com/aws/karpenter/releases/tag/v1.3.4
-# karpenter-v1.2.4          1.2.4    # ref: https://github.com/aws/karpenter/releases/tag/v1.2.4
 
 APP_VERSION="1.6.1"
 CHART_VERSION="1.6.1"
