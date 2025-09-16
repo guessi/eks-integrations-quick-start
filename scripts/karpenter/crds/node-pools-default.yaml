@@ -39,9 +39,8 @@ spec:
         operator: In
         values:
         - t3a
-        - c5a
-        - m5a
-        - m6a
+        - c6a
+        - m7a
       - key: karpenter.k8s.aws/instance-cpu
         operator: Lt
         values:
