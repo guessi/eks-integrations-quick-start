@@ -9,7 +9,8 @@ SERVICE_ACCOUNT_NAME="${SERVICE_ACCOUNT_NAME_AwsLoadBalancerController}"
 
 # CHART VERSION APP VERSION
 # ---------------------------
-# 1.13.4        v2.13.4 (recommend)
+# 1.14.0        v2.14.0 (recommend)
+# 1.13.4        v2.13.4 (preferred version for 2.13.x)
 # 1.12.0        v2.12.0 (preferred version for 2.12.x)
 # 1.11.0        v2.11.0 (preferred version for 2.11.x)
 # 1.10.1        v2.10.1 (preferred version for 2.10.x)
@@ -18,10 +19,10 @@ SERVICE_ACCOUNT_NAME="${SERVICE_ACCOUNT_NAME_AwsLoadBalancerController}"
 # 1.7.2         v2.7.2 (preferred version for 2.7.x)
 
 # Kubernetes version requirements
-# - https://kubernetes-sigs.github.io/aws-load-balancer-controller/v2.13/deploy/installation/#supported-kubernetes-versions
+# - https://kubernetes-sigs.github.io/aws-load-balancer-controller/v2.14/deploy/installation/#supported-kubernetes-versions
 
-APP_VERSION="v2.13.4"
-CHART_VERSION="1.13.4"
+APP_VERSION="v2.14.0"
+CHART_VERSION="1.14.0"
 
 echo "[debug] detecting AWS Account ID"
 export AWS_ACCOUNT_ID=$(aws sts get-caller-identity --query Account --output text)
@@ -81,7 +82,7 @@ eksctl create iamserviceaccount \
   --override-existing-serviceaccounts
 
 echo "[debug] creating Custom Resource Definition (CRDs)"
-kubectl apply -k "github.com/aws/eks-charts/stable/aws-load-balancer-controller/crds?ref=master"
+kubectl apply -f "github.com/aws/eks-charts/stable/aws-load-balancer-controller/crds?ref=master"
 
 echo "[debug] detecting Helm resource existance"
 helm list --all-namespaces | grep -q 'aws-load-balancer-controller'
