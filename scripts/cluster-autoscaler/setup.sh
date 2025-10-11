@@ -9,10 +9,10 @@ SERVICE_ACCOUNT_NAME="${SERVICE_ACCOUNT_NAME_ClusterAutoScaler}"
 
 # CHART VERSION	APP VERSION
 # ---------------------------
-# 9.50.1       	1.34.1
+# 9.51.0       	1.34.1
 
 APP_VERSION="v1.34.1"
-CHART_VERSION="9.50.1"
+CHART_VERSION="9.51.0"
 
 # HINT: if there have multiple cluster-autoscaler running under the same cluster, you might need to customize these variables.
 NAMESPACE="kube-system"
