@@ -9,7 +9,7 @@ SERVICE_ACCOUNT_NAME="${SERVICE_ACCOUNT_NAME_ClusterAutoScaler}"
 
 # CHART VERSION	APP VERSION
 # ---------------------------
-# 9.51.0       	1.34.1
+# 9.52.1       	1.34.1
 
 APP_VERSION="v1.34.1"
 CHART_VERSION="9.51.0"
