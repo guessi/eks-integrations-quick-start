@@ -9,10 +9,10 @@ SERVICE_ACCOUNT_NAME="${SERVICE_ACCOUNT_NAME_AppMeshController}"
 
 # CHART VERSION APP VERSION
 # ---------------------------
-# 1.13.1        1.13.1
+# 1.13.3        1.13.3
 
-APP_VERSION="1.13.1"
-CHART_VERSION="1.13.1"
+APP_VERSION="1.13.3"
+CHART_VERSION="1.13.3"
 
 echo "[debug] detecting AWS Account ID"
 export AWS_ACCOUNT_ID=$(aws sts get-caller-identity --query Account --output text)
