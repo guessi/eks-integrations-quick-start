@@ -7,10 +7,10 @@ EKS_CLUSTER_NAME="${EKS_CLUSTER_NAME}"
 IAM_POLICY_NAME="VPCLatticeControllerIAMPolicy"
 SERVICE_ACCOUNT_NAME="gateway-api-controller"
 
-# ref: https://github.com/aws/aws-application-networking-k8s/blob/v1.1.2/docs/guides/deploy.md
+# ref: https://github.com/aws/aws-application-networking-k8s/blob/v1.1.6/docs/guides/deploy.md
 
-APP_VERSION="1.1.2"
-CHART_VERSION="1.1.2"
+APP_VERSION="1.1.6"
+CHART_VERSION="1.1.6"
 
 echo "[debug] detecting AWS Account ID"
 export AWS_ACCOUNT_ID=$(aws sts get-caller-identity --query Account --output text)
@@ -19,7 +19,7 @@ echo "[debug] AWS Account ID: ${AWS_ACCOUNT_ID}"
 echo "[debug] detecting namespace existance"
 kubectl get namespace | grep -q 'aws-application-networking-system'
 if [ $? -ne 0 ]; then
-  kubectl apply -f https://raw.githubusercontent.com/aws/aws-application-networking-k8s/v1.1.2/files/controller-installation/deploy-namesystem.yaml
+  kubectl apply -f https://raw.githubusercontent.com/aws/aws-application-networking-k8s/v1.1.6/files/controller-installation/deploy-namesystem.yaml
 else
   echo "[debug] namespace existed"
 fi
@@ -29,7 +29,7 @@ aws iam list-policies --query "Policies[].[PolicyName,UpdateDate]" --output text
 
 if [ $? -ne 0 ]; then
   echo "[debug] IAM policy existance not found, creating"
-  curl -fsSL https://raw.githubusercontent.com/aws/aws-application-networking-k8s/v1.1.2/files/controller-installation/recommended-inline-policy.json -O
+  curl -fsSL https://raw.githubusercontent.com/aws/aws-application-networking-k8s/v1.1.6/files/controller-installation/recommended-inline-policy.json -O
   aws iam create-policy \
     --policy-name ${IAM_POLICY_NAME} \
     --policy-document file://recommended-inline-policy.json
@@ -90,7 +90,7 @@ helm list --all-namespaces --filter gateway-api-controller
 echo "[debug] setup GatewayClass"
 if ! kubectl get GatewayClass | grep -q 'amazon-vpc-lattice'; then
   echo "[debug] GatewayClass 'amazon-vpc-lattice' not found, creating"
-  kubectl apply -f https://raw.githubusercontent.com/aws/aws-application-networking-k8s/v1.1.2/files/controller-installation/gatewayclass.yaml
+  kubectl apply -f https://raw.githubusercontent.com/aws/aws-application-networking-k8s/v1.1.6/files/controller-installation/gatewayclass.yaml
   kubectl get GatewayClass
 else
   echo "[debug] GatewayClass 'amazon-vpc-lattice' existed"
