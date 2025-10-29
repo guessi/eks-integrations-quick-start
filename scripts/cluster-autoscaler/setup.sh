@@ -23,7 +23,7 @@ FULLNAME_OVERRIDE="cluster-autoscaler"
 # - https://github.com/kubernetes/autoscaler/releases/tag/cluster-autoscaler-1.33.2
 # - https://github.com/kubernetes/autoscaler/releases/tag/cluster-autoscaler-1.32.4
 # - https://github.com/kubernetes/autoscaler/releases/tag/cluster-autoscaler-1.31.5
-# - https://github.com/kubernetes/autoscaler/releases/tag/cluster-autoscaler-1.30.6
+# - https://github.com/kubernetes/autoscaler/releases/tag/cluster-autoscaler-1.30.7
 
 echo "[debug] detecting AWS Account ID"
 export AWS_ACCOUNT_ID=$(aws sts get-caller-identity --query Account --output text)
