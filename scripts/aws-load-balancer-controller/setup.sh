@@ -77,7 +77,7 @@ eksctl create iamserviceaccount \
   --override-existing-serviceaccounts
 
 echo "[debug] creating Custom Resource Definition (CRDs)"
-kubectl apply -f "github.com/aws/eks-charts/stable/aws-load-balancer-controller/crds?ref=master"
+kubectl apply -f https://raw.githubusercontent.com/aws/eks-charts/master/stable/aws-load-balancer-controller/crds/crds.yaml
 
 echo "[debug] detecting Helm resource existance"
 helm list --all-namespaces | grep -q 'aws-load-balancer-controller'
