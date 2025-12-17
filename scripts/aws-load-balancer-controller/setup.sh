@@ -64,6 +64,9 @@ else
   else
     echo "[debug] policy update skipped, no update required"
   fi
+
+  echo "[debug] cleanup running-policy.json"
+  rm -vf running-policy.json
 fi
 
 echo "[debug] creating IAM Roles for Service Accounts"
@@ -78,6 +81,12 @@ eksctl create iamserviceaccount \
 
 echo "[debug] creating Custom Resource Definition (CRDs)"
 kubectl apply -f https://raw.githubusercontent.com/aws/eks-charts/master/stable/aws-load-balancer-controller/crds/crds.yaml
+
+GATEWAY_API_VERSION="v1.2.0"
+echo "[debug] creating Custom Resource Definition (CRDs) for Gateway API ${GATEWAY_API_VERSION}"
+kubectl apply -f https://github.com/kubernetes-sigs/gateway-api/releases/download/${GATEWAY_API_VERSION}/standard-install.yaml
+# kubectl apply -f https://github.com/kubernetes-sigs/gateway-api/releases/download/${GATEWAY_API_VERSION}/experimental-install.yaml
+kubectl apply -f https://raw.githubusercontent.com/kubernetes-sigs/aws-load-balancer-controller/refs/heads/main/config/crd/gateway/gateway-crds.yaml
 
 echo "[debug] detecting Helm resource existance"
 helm list --all-namespaces | grep -q 'aws-load-balancer-controller'
@@ -94,7 +103,9 @@ helm upgrade \
     --set image.tag=${APP_VERSION} \
     --set clusterName=${EKS_CLUSTER_NAME} \
     --set region=${AWS_REGION} \
-    --set vpcId=${VPC_ID}
+    --set vpcId=${VPC_ID} \
+    --set controllerConfig.featureGates.NLBGatewayAPI=true \
+    --set controllerConfig.featureGates.ALBGatewayAPI=true
 
 echo "[debug] listing installed"
 helm list --all-namespaces --filter aws-load-balancer-controller
