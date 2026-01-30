@@ -9,16 +9,15 @@ SERVICE_ACCOUNT_NAME="${SERVICE_ACCOUNT_NAME_AwsLoadBalancerController}"
 
 # CHART VERSION APP VERSION
 # ---------------------------
-# 1.17.1        v2.17.1 (recommend)
-# 1.16.0        v2.16.0 (preferred version for 2.16.x)
-# 1.15.0        v2.15.0 (preferred version for 2.15.x)
-# 1.14.1        v2.14.1 (preferred version for 2.14.x)
+# 3.0.0         v3.0.0 (recommend)
+# 1.17.1        v2.17.1 (preferred version for 2.x)
+# 1.16.0        v2.16.0
 
 # Kubernetes version requirements
-# - https://kubernetes-sigs.github.io/aws-load-balancer-controller/v2.17/deploy/installation/#supported-kubernetes-versions
+# - https://kubernetes-sigs.github.io/aws-load-balancer-controller/v3.0/deploy/installation/#supported-kubernetes-versions
 
-APP_VERSION="v2.17.1"
-CHART_VERSION="1.17.1"
+APP_VERSION="v3.0.0"
+CHART_VERSION="3.0.0"
 
 echo "[debug] detecting AWS Account ID"
 export AWS_ACCOUNT_ID=$(aws sts get-caller-identity --query Account --output text)
@@ -83,7 +82,13 @@ eksctl create iamserviceaccount \
 echo "[debug] creating Custom Resource Definition (CRDs)"
 kubectl apply -f https://raw.githubusercontent.com/aws/eks-charts/master/stable/aws-load-balancer-controller/crds/crds.yaml
 
-GATEWAY_API_VERSION="v1.2.0"
+GATEWAY_API_VERSION="v1.3.0"
+
+CHART_MAJOR_VERSION=$(echo ${CHART_VERSION} | cut -d'.' -f1)
+if [ "x${CHART_MAJOR_VERSION}" != "x3" ]; then
+  GATEWAY_API_VERSION="v1.2.0"
+fi
+
 echo "[debug] creating Custom Resource Definition (CRDs) for Gateway API ${GATEWAY_API_VERSION}"
 kubectl apply -f https://github.com/kubernetes-sigs/gateway-api/releases/download/${GATEWAY_API_VERSION}/standard-install.yaml
 # kubectl apply -f https://github.com/kubernetes-sigs/gateway-api/releases/download/${GATEWAY_API_VERSION}/experimental-install.yaml
