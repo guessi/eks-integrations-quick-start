@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
-APP_VERSION="1.25.1"
-CHART_VERSION="0.27.1"
+APP_VERSION="1.25.4"
+CHART_VERSION="0.27.4"
 
 echo "[debug] log into Public ECR"
 aws ecr-public get-login-password --region us-east-1 | helm registry login --username AWS --password-stdin public.ecr.aws
@@ -14,6 +14,8 @@ helm upgrade \
   --namespace kube-system \
   --install aws-node-termination-handler \
   --version ${CHART_VERSION} \
+  --recreate-pods \
+  --force \
   oci://public.ecr.aws/aws-ec2/helm/aws-node-termination-handler
     # --set enableSpotInterruptionDraining="true" \
     # --set enableRebalanceMonitoring="true" \
