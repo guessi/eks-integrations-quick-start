@@ -9,15 +9,15 @@ SERVICE_ACCOUNT_NAME="${SERVICE_ACCOUNT_NAME_AwsLoadBalancerController}"
 
 # CHART VERSION APP VERSION
 # ---------------------------
-# 3.0.0         v3.0.0 (recommend)
+# 3.1.0         v3.1.0 (recommend)
 # 1.17.1        v2.17.1 (preferred version for 2.x)
 # 1.16.0        v2.16.0
 
 # Kubernetes version requirements
-# - https://kubernetes-sigs.github.io/aws-load-balancer-controller/v3.0/deploy/installation/#supported-kubernetes-versions
+# - https://kubernetes-sigs.github.io/aws-load-balancer-controller/v3.1/deploy/installation/#supported-kubernetes-versions
 
-APP_VERSION="v3.0.0"
-CHART_VERSION="3.0.0"
+APP_VERSION="v3.1.0"
+CHART_VERSION="3.1.0"
 
 echo "[debug] detecting AWS Account ID"
 export AWS_ACCOUNT_ID=$(aws sts get-caller-identity --query Account --output text)
@@ -80,7 +80,7 @@ eksctl create iamserviceaccount \
   --override-existing-serviceaccounts
 
 echo "[debug] creating Custom Resource Definition (CRDs)"
-kubectl apply -f https://raw.githubusercontent.com/aws/eks-charts/master/stable/aws-load-balancer-controller/crds/crds.yaml
+kubectl apply -k "github.com/aws/eks-charts/stable/aws-load-balancer-controller/crds?ref=master"
 
 GATEWAY_API_VERSION="v1.3.0"
 
