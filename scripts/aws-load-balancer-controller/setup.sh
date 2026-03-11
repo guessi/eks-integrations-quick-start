@@ -79,20 +79,8 @@ eksctl create iamserviceaccount \
   --approve \
   --override-existing-serviceaccounts
 
-echo "[debug] creating Custom Resource Definition (CRDs)"
+echo "[debug] creating Custom Resource Definition (CRDs) for AWS Load Balancer Controller"
 kubectl apply -k "github.com/aws/eks-charts/stable/aws-load-balancer-controller/crds?ref=master"
-
-GATEWAY_API_VERSION="v1.3.0"
-
-CHART_MAJOR_VERSION=$(echo ${CHART_VERSION} | cut -d'.' -f1)
-if [ "x${CHART_MAJOR_VERSION}" != "x3" ]; then
-  GATEWAY_API_VERSION="v1.2.0"
-fi
-
-echo "[debug] creating Custom Resource Definition (CRDs) for Gateway API ${GATEWAY_API_VERSION}"
-kubectl apply -f https://github.com/kubernetes-sigs/gateway-api/releases/download/${GATEWAY_API_VERSION}/standard-install.yaml
-# kubectl apply -f https://github.com/kubernetes-sigs/gateway-api/releases/download/${GATEWAY_API_VERSION}/experimental-install.yaml
-kubectl apply -f https://raw.githubusercontent.com/kubernetes-sigs/aws-load-balancer-controller/refs/heads/main/config/crd/gateway/gateway-crds.yaml
 
 echo "[debug] detecting Helm resource existance"
 helm list --all-namespaces | grep -q 'aws-load-balancer-controller'
@@ -115,3 +103,15 @@ helm upgrade \
 
 echo "[debug] listing installed"
 helm list --all-namespaces --filter aws-load-balancer-controller
+
+GATEWAY_API_VERSION="v1.3.0"
+
+CHART_MAJOR_VERSION=$(echo ${CHART_VERSION} | cut -d'.' -f1)
+if [ "x${CHART_MAJOR_VERSION}" != "x3" ]; then
+  GATEWAY_API_VERSION="v1.2.0"
+fi
+
+echo "[debug] creating Custom Resource Definition (CRDs) for Gateway API ${GATEWAY_API_VERSION}"
+kubectl apply -f https://github.com/kubernetes-sigs/gateway-api/releases/download/${GATEWAY_API_VERSION}/standard-install.yaml
+# kubectl apply -f https://github.com/kubernetes-sigs/gateway-api/releases/download/${GATEWAY_API_VERSION}/experimental-install.yaml
+kubectl apply -f https://raw.githubusercontent.com/kubernetes-sigs/aws-load-balancer-controller/refs/heads/main/config/crd/gateway/gateway-crds.yaml
