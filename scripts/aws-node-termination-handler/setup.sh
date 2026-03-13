@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
-APP_VERSION="1.25.4"
-CHART_VERSION="0.27.4"
+APP_VERSION="1.25.5"
+CHART_VERSION="0.27.5"
 
 echo "[debug] log into Public ECR"
 aws ecr-public get-login-password --region us-east-1 | helm registry login --username AWS --password-stdin public.ecr.aws
