@@ -6,7 +6,6 @@ EKS_CLUSTER_NAME="eks-demo"
 IAM_POLICY_NAME_AWSLoadBalancerController="AWS_Load_Balancer_Controller_Policy"
 IAM_POLICY_NAME_AppMeshController="AppMesh_Controller_Policy"
 IAM_POLICY_NAME_ClusterAutoScaler="Cluster_Autoscaler_Policy"
-IAM_POLICY_NAME_Karpenter="KarpenterControllerPolicy-${EKS_CLUSTER_NAME}" # defined by CloudFormation stack
 IAM_ROLE_NAME_Karpenter="${EKS_CLUSTER_NAME}-karpenter"
 
 # Service Accounts

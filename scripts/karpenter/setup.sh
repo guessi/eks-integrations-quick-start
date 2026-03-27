@@ -21,12 +21,11 @@ KARPENTER_NAMESPACE="kube-system"
 
 # CHART VERSION             APP VERSION
 # ----------------------------------------
-# karpenter-v1.9.0          1.9.0    # ref: https://github.com/aws/karpenter/releases/tag/v1.9.0 (recommend)
-# karpenter-v1.8.6          1.8.6    # ref: https://github.com/aws/karpenter/releases/tag/v1.8.6
-# karpenter-v1.7.4          1.7.4    # ref: https://github.com/aws/karpenter/releases/tag/v1.7.4
+# karpenter-v1.11.0        1.11.0    # ref: https://github.com/aws/karpenter/releases/tag/v1.11.0 (recommend)
+# karpenter-v1.10.0        1.10.0    # ref: https://github.com/aws/karpenter/releases/tag/v1.10.0
 
-APP_VERSION="1.9.0"
-CHART_VERSION="1.9.0"
+APP_VERSION="1.11.0"
+CHART_VERSION="1.11.0"
 
 echo "[debug] detecting AWS Account ID"
 export AWS_ACCOUNT_ID=$(aws sts get-caller-identity --query Account --output text)
@@ -68,7 +67,11 @@ eksctl create iamserviceaccount \
   --cluster ${EKS_CLUSTER_NAME} \
   --name ${SERVICE_ACCOUNT_NAME} \
   --role-name "${IAM_ROLE_NAME}" \
-  --attach-policy-arn arn:aws:iam::${AWS_ACCOUNT_ID}:policy/${IAM_POLICY_NAME} \
+  --attach-policy-arn arn:aws:iam::${AWS_ACCOUNT_ID}:policy/KarpenterControllerNodeLifecyclePolicy-${EKS_CLUSTER_NAME} \
+  --attach-policy-arn arn:aws:iam::${AWS_ACCOUNT_ID}:policy/KarpenterControllerIAMIntegrationPolicy-${EKS_CLUSTER_NAME} \
+  --attach-policy-arn arn:aws:iam::${AWS_ACCOUNT_ID}:policy/KarpenterControllerEKSIntegrationPolicy-${EKS_CLUSTER_NAME} \
+  --attach-policy-arn arn:aws:iam::${AWS_ACCOUNT_ID}:policy/KarpenterControllerInterruptionPolicy-${EKS_CLUSTER_NAME} \
+  --attach-policy-arn arn:aws:iam::${AWS_ACCOUNT_ID}:policy/KarpenterControllerResourceDiscoveryPolicy-${EKS_CLUSTER_NAME} \
   --approve \
   --override-existing-serviceaccounts
 
