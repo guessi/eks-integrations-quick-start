@@ -9,15 +9,35 @@ SERVICE_ACCOUNT_NAME="${SERVICE_ACCOUNT_NAME_AwsLoadBalancerController}"
 
 # CHART VERSION APP VERSION
 # ---------------------------
-# 3.1.0         v3.1.0 (recommend)
+# 3.2.1         v3.2.1  (recommend)
 # 1.17.1        v2.17.1 (preferred version for 2.x)
 # 1.16.0        v2.16.0
 
 # Kubernetes version requirements
-# - https://kubernetes-sigs.github.io/aws-load-balancer-controller/v3.1/deploy/installation/#supported-kubernetes-versions
+# - https://kubernetes-sigs.github.io/aws-load-balancer-controller/v3.2/deploy/installation/#supported-kubernetes-versions
 
-APP_VERSION="v3.1.0"
-CHART_VERSION="3.1.0"
+APP_VERSION="v3.2.1"
+CHART_VERSION="3.2.1"
+
+CHART_MAJOR_VERSION=$(echo ${CHART_VERSION} | cut -d'.' -f1)
+CHART_MINOR_VERSION=$(echo ${CHART_VERSION} | cut -d'.' -f2)
+
+echo "[debug] CHART_MAJOR_VERSION: ${CHART_MAJOR_VERSION}"
+echo "[debug] CHART_MINOR_VERSION: ${CHART_MINOR_VERSION}"
+
+GATEWAY_API_VERSION=""
+
+if [ ${CHART_MAJOR_VERSION} -eq 3 ] && [ ${CHART_MINOR_VERSION} -eq 2 ]; then
+  GATEWAY_API_VERSION="v1.5.0"
+elif [ ${CHART_MAJOR_VERSION} -eq 3 ] && [ ${CHART_MINOR_VERSION} -eq 1 ]; then
+  GATEWAY_API_VERSION="v1.3.0"
+elif [ ${CHART_MAJOR_VERSION} -eq 3 ] && [ ${CHART_MINOR_VERSION} -eq 0 ]; then
+  GATEWAY_API_VERSION="v1.2.0"
+elif [ ${CHART_MAJOR_VERSION} -eq 2 ] && [ ${CHART_MINOR_VERSION} -ge 13 ] && [ ${CHART_MINOR_VERSION} -le 17 ]; then
+  GATEWAY_API_VERSION="v1.2.0"
+fi
+
+echo "[debug] GATEWAY_API_VERSION: ${GATEWAY_API_VERSION}"
 
 echo "[debug] detecting AWS Account ID"
 export AWS_ACCOUNT_ID=$(aws sts get-caller-identity --query Account --output text)
@@ -104,14 +124,11 @@ helm upgrade \
 echo "[debug] listing installed"
 helm list --all-namespaces --filter aws-load-balancer-controller
 
-GATEWAY_API_VERSION="v1.3.0"
-
-CHART_MAJOR_VERSION=$(echo ${CHART_VERSION} | cut -d'.' -f1)
-if [ "x${CHART_MAJOR_VERSION}" != "x3" ]; then
-  GATEWAY_API_VERSION="v1.2.0"
+if [ -n "${GATEWAY_API_VERSION}" ]; then
+  echo "[debug] creating Custom Resource Definition (CRDs) for Gateway API ${GATEWAY_API_VERSION}"
+  kubectl apply -f https://github.com/kubernetes-sigs/gateway-api/releases/download/${GATEWAY_API_VERSION}/standard-install.yaml
+  # kubectl apply -f https://github.com/kubernetes-sigs/gateway-api/releases/download/${GATEWAY_API_VERSION}/experimental-install.yaml
+  kubectl apply -f https://raw.githubusercontent.com/kubernetes-sigs/aws-load-balancer-controller/refs/tags/${APP_VERSION}/config/crd/gateway/gateway-crds.yaml
+else
+  echo "[debug] No Gateway API version mapped for chart ${CHART_VERSION}, skipping Gateway API CRD installation"
 fi
-
-echo "[debug] creating Custom Resource Definition (CRDs) for Gateway API ${GATEWAY_API_VERSION}"
-kubectl apply -f https://github.com/kubernetes-sigs/gateway-api/releases/download/${GATEWAY_API_VERSION}/standard-install.yaml
-# kubectl apply -f https://github.com/kubernetes-sigs/gateway-api/releases/download/${GATEWAY_API_VERSION}/experimental-install.yaml
-kubectl apply -f https://raw.githubusercontent.com/kubernetes-sigs/aws-load-balancer-controller/refs/heads/main/config/crd/gateway/gateway-crds.yaml
