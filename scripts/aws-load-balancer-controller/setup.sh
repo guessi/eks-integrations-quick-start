@@ -19,6 +19,9 @@ SERVICE_ACCOUNT_NAME="${SERVICE_ACCOUNT_NAME_AwsLoadBalancerController}"
 APP_VERSION="v3.2.1"
 CHART_VERSION="3.2.1"
 
+NLB_GATEWAY_API="false"
+ALB_GATEWAY_API="true"
+
 CHART_MAJOR_VERSION=$(echo ${CHART_VERSION} | cut -d'.' -f1)
 CHART_MINOR_VERSION=$(echo ${CHART_VERSION} | cut -d'.' -f2)
 
@@ -118,17 +121,21 @@ helm upgrade \
     --set clusterName=${EKS_CLUSTER_NAME} \
     --set region=${AWS_REGION} \
     --set vpcId=${VPC_ID} \
-    --set controllerConfig.featureGates.NLBGatewayAPI=true \
-    --set controllerConfig.featureGates.ALBGatewayAPI=true
+    --set controllerConfig.featureGates.NLBGatewayAPI=${NLB_GATEWAY_API} \
+    --set controllerConfig.featureGates.ALBGatewayAPI=${ALB_GATEWAY_API}
 
 echo "[debug] listing installed"
 helm list --all-namespaces --filter aws-load-balancer-controller
 
-if [ -n "${GATEWAY_API_VERSION}" ]; then
-  echo "[debug] creating Custom Resource Definition (CRDs) for Gateway API ${GATEWAY_API_VERSION}"
-  kubectl apply -f https://github.com/kubernetes-sigs/gateway-api/releases/download/${GATEWAY_API_VERSION}/standard-install.yaml
-  # kubectl apply -f https://github.com/kubernetes-sigs/gateway-api/releases/download/${GATEWAY_API_VERSION}/experimental-install.yaml
-  kubectl apply -f https://raw.githubusercontent.com/kubernetes-sigs/aws-load-balancer-controller/refs/tags/${APP_VERSION}/config/crd/gateway/gateway-crds.yaml
+if [ -n "${GATEWAY_API_VERSION}" ] && [ "${ALB_GATEWAY_API}" = "true" ]; then
+  if [ "${NLB_GATEWAY_API}" = "true" ]; then
+    GATEWAY_API_YAML="experimental-install.yaml"
+  else
+    GATEWAY_API_YAML="standard-install.yaml"
+  fi
+  echo "[debug] creating Custom Resource Definition (CRDs) for Gateway API ${GATEWAY_API_VERSION} using ${GATEWAY_API_YAML}"
+  kubectl apply --server-side=true -f https://github.com/kubernetes-sigs/gateway-api/releases/download/${GATEWAY_API_VERSION}/${GATEWAY_API_YAML}
+  kubectl apply --server-side=true -f https://raw.githubusercontent.com/kubernetes-sigs/aws-load-balancer-controller/refs/tags/${APP_VERSION}/config/crd/gateway/gateway-crds.yaml
 else
   echo "[debug] No Gateway API version mapped for chart ${CHART_VERSION}, skipping Gateway API CRD installation"
 fi
