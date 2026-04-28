@@ -9,15 +9,15 @@ SERVICE_ACCOUNT_NAME="${SERVICE_ACCOUNT_NAME_AwsLoadBalancerController}"
 
 # CHART VERSION APP VERSION
 # ---------------------------
-# 3.2.1         v3.2.1  (recommend)
+# 3.2.2         v3.2.2  (recommend)
 # 1.17.1        v2.17.1 (preferred version for 2.x)
 # 1.16.0        v2.16.0
 
 # Kubernetes version requirements
 # - https://kubernetes-sigs.github.io/aws-load-balancer-controller/v3.2/deploy/installation/#supported-kubernetes-versions
 
-APP_VERSION="v3.2.1"
-CHART_VERSION="3.2.1"
+APP_VERSION="v3.2.2"
+CHART_VERSION="3.2.2"
 
 NLB_GATEWAY_API="false"
 ALB_GATEWAY_API="true"
