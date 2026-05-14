@@ -9,15 +9,15 @@ SERVICE_ACCOUNT_NAME="${SERVICE_ACCOUNT_NAME_AwsLoadBalancerController}"
 
 # CHART VERSION APP VERSION
 # ---------------------------
-# 3.2.2         v3.2.2  (recommend)
+# 3.3.0         v3.3.0  (recommend)
 # 1.17.1        v2.17.1 (preferred version for 2.x)
 # 1.16.0        v2.16.0
 
 # Kubernetes version requirements
-# - https://kubernetes-sigs.github.io/aws-load-balancer-controller/v3.2/deploy/installation/#supported-kubernetes-versions
+# - https://kubernetes-sigs.github.io/aws-load-balancer-controller/v3.3/deploy/installation/#supported-kubernetes-versions
 
-APP_VERSION="v3.2.2"
-CHART_VERSION="3.2.2"
+APP_VERSION="v3.3.0"
+CHART_VERSION="3.3.0"
 
 NLB_GATEWAY_API="false"
 ALB_GATEWAY_API="true"
@@ -30,7 +30,7 @@ echo "[debug] CHART_MINOR_VERSION: ${CHART_MINOR_VERSION}"
 
 GATEWAY_API_VERSION=""
 
-if [ ${CHART_MAJOR_VERSION} -eq 3 ] && [ ${CHART_MINOR_VERSION} -eq 2 ]; then
+if [ ${CHART_MAJOR_VERSION} -eq 3 ] && [ ${CHART_MINOR_VERSION} -ge 2 ]; then
   GATEWAY_API_VERSION="v1.5.0"
 elif [ ${CHART_MAJOR_VERSION} -eq 3 ] && [ ${CHART_MINOR_VERSION} -eq 1 ]; then
   GATEWAY_API_VERSION="v1.3.0"
