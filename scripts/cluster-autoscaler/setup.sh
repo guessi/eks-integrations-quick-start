@@ -20,8 +20,8 @@ FULLNAME_OVERRIDE="cluster-autoscaler"
 
 # Supported Versions:
 # - https://github.com/kubernetes/autoscaler/releases/tag/cluster-autoscaler-1.35.1
-# - https://github.com/kubernetes/autoscaler/releases/tag/cluster-autoscaler-1.34.3
-# - https://github.com/kubernetes/autoscaler/releases/tag/cluster-autoscaler-1.33.4
+# - https://github.com/kubernetes/autoscaler/releases/tag/cluster-autoscaler-1.34.5
+# - https://github.com/kubernetes/autoscaler/releases/tag/cluster-autoscaler-1.33.6
 # - https://github.com/kubernetes/autoscaler/releases/tag/cluster-autoscaler-1.32.7
 # - https://github.com/kubernetes/autoscaler/releases/tag/cluster-autoscaler-1.31.5
 # - https://github.com/kubernetes/autoscaler/releases/tag/cluster-autoscaler-1.30.7
