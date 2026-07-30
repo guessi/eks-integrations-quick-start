@@ -28,19 +28,22 @@ CHART_MINOR_VERSION=$(echo ${CHART_VERSION} | cut -d'.' -f2)
 echo "[debug] CHART_MAJOR_VERSION: ${CHART_MAJOR_VERSION}"
 echo "[debug] CHART_MINOR_VERSION: ${CHART_MINOR_VERSION}"
 
-GATEWAY_API_VERSION=""
+GATEWAY_API_STANDARD_VERSION=""
+GATEWAY_API_EXPERIMENTAL_VERSION=""
 
-if [ ${CHART_MAJOR_VERSION} -eq 3 ] && [ ${CHART_MINOR_VERSION} -ge 2 ]; then
-  GATEWAY_API_VERSION="v1.5.0"
-elif [ ${CHART_MAJOR_VERSION} -eq 3 ] && [ ${CHART_MINOR_VERSION} -eq 1 ]; then
-  GATEWAY_API_VERSION="v1.3.0"
-elif [ ${CHART_MAJOR_VERSION} -eq 3 ] && [ ${CHART_MINOR_VERSION} -eq 0 ]; then
-  GATEWAY_API_VERSION="v1.2.0"
+if [ ${CHART_MAJOR_VERSION} -eq 3 ] && [ ${CHART_MINOR_VERSION} -ge 3 ]; then
+  GATEWAY_API_STANDARD_VERSION="v1.5.0"
+  GATEWAY_API_EXPERIMENTAL_VERSION="v1.5.0"
+elif [ ${CHART_MAJOR_VERSION} -eq 3 ] && [ ${CHART_MINOR_VERSION} -ge 0 ] && [ ${CHART_MINOR_VERSION} -le 1 ]; then
+  GATEWAY_API_STANDARD_VERSION="v1.3.0"
+  GATEWAY_API_EXPERIMENTAL_VERSION="v1.3.0"
 elif [ ${CHART_MAJOR_VERSION} -eq 2 ] && [ ${CHART_MINOR_VERSION} -ge 13 ] && [ ${CHART_MINOR_VERSION} -le 17 ]; then
-  GATEWAY_API_VERSION="v1.2.0"
+  GATEWAY_API_STANDARD_VERSION="v1.2.0"
+  GATEWAY_API_EXPERIMENTAL_VERSION="v1.2.0"
 fi
 
-echo "[debug] GATEWAY_API_VERSION: ${GATEWAY_API_VERSION}"
+echo "[debug] GATEWAY_API_STANDARD_VERSION: ${GATEWAY_API_STANDARD_VERSION}"
+echo "[debug] GATEWAY_API_EXPERIMENTAL_VERSION: ${GATEWAY_API_EXPERIMENTAL_VERSION}"
 
 echo "[debug] detecting AWS Account ID"
 export AWS_ACCOUNT_ID=$(aws sts get-caller-identity --query Account --output text)
@@ -127,15 +130,17 @@ helm upgrade \
 echo "[debug] listing installed"
 helm list --all-namespaces --filter aws-load-balancer-controller
 
-if [ -n "${GATEWAY_API_VERSION}" ] && [ "${ALB_GATEWAY_API}" = "true" ]; then
-  if [ "${NLB_GATEWAY_API}" = "true" ]; then
-    GATEWAY_API_YAML="experimental-install.yaml"
-  else
-    GATEWAY_API_YAML="standard-install.yaml"
+if [ "${ALB_GATEWAY_API}" = "true" ] || [ "${NLB_GATEWAY_API}" = "true" ]; then
+  if [ "${ALB_GATEWAY_API}" = "true" ] && [ -n "${GATEWAY_API_STANDARD_VERSION}" ]; then
+    echo "[debug] creating Custom Resource Definition (CRDs) for Gateway API ${GATEWAY_API_STANDARD_VERSION} using standard-install.yaml"
+    kubectl apply --server-side=true -f https://github.com/kubernetes-sigs/gateway-api/releases/download/${GATEWAY_API_STANDARD_VERSION}/standard-install.yaml
   fi
-  echo "[debug] creating Custom Resource Definition (CRDs) for Gateway API ${GATEWAY_API_VERSION} using ${GATEWAY_API_YAML}"
-  kubectl apply --server-side=true -f https://github.com/kubernetes-sigs/gateway-api/releases/download/${GATEWAY_API_VERSION}/${GATEWAY_API_YAML}
+  if [ "${NLB_GATEWAY_API}" = "true" ] && [ -n "${GATEWAY_API_EXPERIMENTAL_VERSION}" ]; then
+    echo "[debug] creating Custom Resource Definition (CRDs) for Gateway API ${GATEWAY_API_EXPERIMENTAL_VERSION} using experimental-install.yaml"
+    kubectl apply --server-side=true -f https://github.com/kubernetes-sigs/gateway-api/releases/download/${GATEWAY_API_EXPERIMENTAL_VERSION}/experimental-install.yaml
+  fi
+  echo "[debug] creating Custom Resource Definition (CRDs) for AWS Load Balancer Controller Gateway API"
   kubectl apply --server-side=true -f https://raw.githubusercontent.com/kubernetes-sigs/aws-load-balancer-controller/refs/tags/${APP_VERSION}/config/crd/gateway/gateway-crds.yaml
 else
-  echo "[debug] No Gateway API version mapped for chart ${CHART_VERSION}, skipping Gateway API CRD installation"
+  echo "[debug] Gateway API disabled (ALB_GATEWAY_API=${ALB_GATEWAY_API}, NLB_GATEWAY_API=${NLB_GATEWAY_API}), skipping Gateway API CRD installation"
 fi
