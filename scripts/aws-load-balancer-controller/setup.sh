@@ -9,15 +9,16 @@ SERVICE_ACCOUNT_NAME="${SERVICE_ACCOUNT_NAME_AwsLoadBalancerController}"
 
 # CHART VERSION APP VERSION
 # ---------------------------
-# 3.4.3         v3.4.3  (recommend)
+# 3.5.0         v3.5.0  (recommend)
+# 3.4.3         v3.4.3
 # 1.17.1        v2.17.1 (preferred version for 2.x)
 # 1.16.0        v2.16.0
 
 # Kubernetes version requirements
-# - https://kubernetes-sigs.github.io/aws-load-balancer-controller/v3.4/deploy/installation/#supported-kubernetes-versions
+# - https://kubernetes-sigs.github.io/aws-load-balancer-controller/v3.5/deploy/installation/#supported-kubernetes-versions
 
-APP_VERSION="v3.4.3"
-CHART_VERSION="3.4.3"
+APP_VERSION="v3.5.0"
+CHART_VERSION="3.5.0"
 
 NLB_GATEWAY_API="false"
 ALB_GATEWAY_API="true"
@@ -31,7 +32,10 @@ echo "[debug] CHART_MINOR_VERSION: ${CHART_MINOR_VERSION}"
 GATEWAY_API_STANDARD_VERSION=""
 GATEWAY_API_EXPERIMENTAL_VERSION=""
 
-if [ ${CHART_MAJOR_VERSION} -eq 3 ] && [ ${CHART_MINOR_VERSION} -ge 3 ]; then
+if [ ${CHART_MAJOR_VERSION} -eq 3 ] && [ ${CHART_MINOR_VERSION} -eq 5 ]; then
+  GATEWAY_API_STANDARD_VERSION="v1.6.0"
+  GATEWAY_API_EXPERIMENTAL_VERSION="v1.6.0"
+elif [ ${CHART_MAJOR_VERSION} -eq 3 ] && [ ${CHART_MINOR_VERSION} -ge 3 ] && [ ${CHART_MINOR_VERSION} -le 4 ]; then
   GATEWAY_API_STANDARD_VERSION="v1.5.0"
   GATEWAY_API_EXPERIMENTAL_VERSION="v1.5.0"
 elif [ ${CHART_MAJOR_VERSION} -eq 3 ] && [ ${CHART_MINOR_VERSION} -ge 0 ] && [ ${CHART_MINOR_VERSION} -le 1 ]; then
@@ -135,9 +139,13 @@ if [ "${ALB_GATEWAY_API}" = "true" ] || [ "${NLB_GATEWAY_API}" = "true" ]; then
     echo "[debug] creating Custom Resource Definition (CRDs) for Gateway API ${GATEWAY_API_STANDARD_VERSION} using standard-install.yaml"
     kubectl apply --server-side=true -f https://github.com/kubernetes-sigs/gateway-api/releases/download/${GATEWAY_API_STANDARD_VERSION}/standard-install.yaml
   fi
-  if [ "${NLB_GATEWAY_API}" = "true" ] && [ -n "${GATEWAY_API_EXPERIMENTAL_VERSION}" ]; then
-    echo "[debug] creating Custom Resource Definition (CRDs) for Gateway API ${GATEWAY_API_EXPERIMENTAL_VERSION} using experimental-install.yaml"
-    kubectl apply --server-side=true -f https://github.com/kubernetes-sigs/gateway-api/releases/download/${GATEWAY_API_EXPERIMENTAL_VERSION}/experimental-install.yaml
+  if [ ${CHART_MAJOR_VERSION} -eq 3 ] && [ ${CHART_MINOR_VERSION} -ge 5 ]; then
+    echo "[debug] Skip, no need to apply experimental-install.yaml for AWS-LBC v3.5+"
+  else
+    if [ "${NLB_GATEWAY_API}" = "true" ] && [ -n "${GATEWAY_API_EXPERIMENTAL_VERSION}" ]; then
+      echo "[debug] creating Custom Resource Definition (CRDs) for Gateway API ${GATEWAY_API_EXPERIMENTAL_VERSION} using experimental-install.yaml"
+      kubectl apply --server-side=true -f https://github.com/kubernetes-sigs/gateway-api/releases/download/${GATEWAY_API_EXPERIMENTAL_VERSION}/experimental-install.yaml
+    fi
   fi
   echo "[debug] creating Custom Resource Definition (CRDs) for AWS Load Balancer Controller Gateway API"
   kubectl apply --server-side=true -f https://raw.githubusercontent.com/kubernetes-sigs/aws-load-balancer-controller/refs/tags/${APP_VERSION}/config/crd/gateway/gateway-crds.yaml
