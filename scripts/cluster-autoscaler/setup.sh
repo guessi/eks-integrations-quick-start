@@ -9,20 +9,20 @@ SERVICE_ACCOUNT_NAME="${SERVICE_ACCOUNT_NAME_ClusterAutoScaler}"
 
 # CHART VERSION	APP VERSION
 # ---------------------------
-# 9.58.0       	1.36.0
+# 9.59.0       	1.36.1
 
-APP_VERSION="v1.36.0"
-CHART_VERSION="9.58.0"
+APP_VERSION="v1.36.1"
+CHART_VERSION="9.59.0"
 
 # HINT: if there have multiple cluster-autoscaler running under the same cluster, you might need to customize these variables.
 NAMESPACE="kube-system"
 FULLNAME_OVERRIDE="cluster-autoscaler"
 
 # Supported Versions:
-# - https://github.com/kubernetes/autoscaler/releases/tag/cluster-autoscaler-1.36.0
-# - https://github.com/kubernetes/autoscaler/releases/tag/cluster-autoscaler-1.35.1
-# - https://github.com/kubernetes/autoscaler/releases/tag/cluster-autoscaler-1.34.4
-# - https://github.com/kubernetes/autoscaler/releases/tag/cluster-autoscaler-1.33.5
+# - https://github.com/kubernetes/autoscaler/releases/tag/cluster-autoscaler-1.36.1
+# - https://github.com/kubernetes/autoscaler/releases/tag/cluster-autoscaler-1.35.2
+# - https://github.com/kubernetes/autoscaler/releases/tag/cluster-autoscaler-1.34.5
+# - https://github.com/kubernetes/autoscaler/releases/tag/cluster-autoscaler-1.33.6
 # - https://github.com/kubernetes/autoscaler/releases/tag/cluster-autoscaler-1.32.7
 # - https://github.com/kubernetes/autoscaler/releases/tag/cluster-autoscaler-1.31.5
 # - https://github.com/kubernetes/autoscaler/releases/tag/cluster-autoscaler-1.30.7
